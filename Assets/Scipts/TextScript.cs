@@ -5,15 +5,24 @@ using TMPro;
 
 public class TextScript : MonoBehaviour
 {
-    [SerializeField] private GameObject TextContainer;
+    //[SerializeField] private GameObject TextContainer;
+    public GameObject TextContainer;
     private TextMeshProUGUI textMeshPro;
 
     public void Start()
     {
-        textMeshPro = TextContainer.GetComponent<TextMeshProUGUI>();
+        if (TextContainer != null)
+        {
+            textMeshPro = TextContainer.GetComponent<TextMeshProUGUI>();
+        }
+        
     }
     public void addtext(string texttoadd)
     {
-        textMeshPro.text += texttoadd;
+        if (textMeshPro != null)
+        {
+            textMeshPro.text += texttoadd;
+        }
+        
     }
 }
