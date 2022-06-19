@@ -385,6 +385,7 @@
 "Assets/Scipts/ButtonScript.cs"
 "Assets/Scipts/CoreGameScript.cs"
 "Assets/Scipts/DayNightScript.cs"
+"Assets/Scipts/IconDemoScript.cs"
 "Assets/Scipts/IconScriptPrototype.cs"
 "Assets/Scipts/TextScript.cs"
 "Assets/TextMesh Pro/Examples & Extras/Scripts/Benchmark01.cs"
