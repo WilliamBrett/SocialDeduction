@@ -25,7 +25,7 @@ public class IconScriptPrototype : MonoBehaviour
     {
         if (textMeshPro != null)
         {
-            textMeshPro.text += "The inverted ankh is used to denote that a actor is 'dead'.";
+            textMeshPro.text += "\n\nThe inverted ankh is used to denote that a actor is 'dead'.";
         }
         ankh.SetActive(true);
     }
