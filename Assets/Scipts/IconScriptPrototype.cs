@@ -13,6 +13,7 @@ public class IconScriptPrototype : MonoBehaviour
     private TextMeshProUGUI textMeshPro;
     public GameObject ankh;
 
+
     public void Start()
     {
         if (TextContainer != null)
