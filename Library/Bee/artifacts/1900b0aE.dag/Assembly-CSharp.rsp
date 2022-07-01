@@ -383,7 +383,7 @@
 -r:"Library/Bee/artifacts/1900b0aE.dag/UnityEditor.UI.ref.dll"
 -r:"Library/Bee/artifacts/1900b0aE.dag/UnityEngine.UI.ref.dll"
 "Assets/Scipts/ButtonScript.cs"
-"Assets/Scipts/CoreGameScript.cs"
+"Assets/Scipts/CoreScript.cs"
 "Assets/Scipts/DayNightScript.cs"
 "Assets/Scipts/IconDemoScript.cs"
 "Assets/Scipts/IconScriptPrototype.cs"
