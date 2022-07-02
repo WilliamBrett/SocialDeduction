@@ -354,9 +354,10 @@ GameObject:
   - component: {fileID: 95122137}
   - component: {fileID: 95122136}
   - component: {fileID: 95122135}
+  - component: {fileID: 95122138}
   m_Layer: 5
-  m_Name: Actor 12
-  m_TagString: Untagged
+  m_Name: Actor12
+  m_TagString: Actor
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -466,6 +467,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 95122133}
   m_CullTransparentMesh: 1
+--- !u!114 &95122138
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 95122133}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c726259f30547a146a9d2b21f565041f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &147975084
 GameObject:
   m_ObjectHideFlags: 0
@@ -1232,7 +1245,6 @@ GameObject:
   - component: {fileID: 396918147}
   - component: {fileID: 396918146}
   - component: {fileID: 396918145}
-  - component: {fileID: 396918148}
   m_Layer: 5
   m_Name: DayNight
   m_TagString: Untagged
@@ -1305,7 +1317,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 396918148}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: DayNightScript, Assembly-CSharp
         m_MethodName: DayNightButton
         m_Mode: 1
@@ -1316,7 +1328,7 @@ MonoBehaviour:
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
-        m_CallState: 2
+        m_CallState: 0
 --- !u!114 &396918146
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1355,24 +1367,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 396918143}
   m_CullTransparentMesh: 1
---- !u!114 &396918148
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 396918143}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dc3c0b012c3acce4c9f432508009758b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  DaySky: {fileID: 786694464}
-  NightSky: {fileID: 911099371}
-  DayNightIcon: {fileID: 396918146}
-  DayIcon: {fileID: 21300000, guid: 0bbe698c72f25b942beb4c4dcdc8fc4b, type: 3}
-  NightIcon: {fileID: 21300000, guid: 32e758a4c1e01b54d894b4e0a20085f9, type: 3}
-  isDay: 0
 --- !u!1 &402497265
 GameObject:
   m_ObjectHideFlags: 0
@@ -1607,7 +1601,7 @@ GameObject:
   - component: {fileID: 493903161}
   m_Layer: 5
   m_Name: Actor4
-  m_TagString: Untagged
+  m_TagString: Actor
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1679,9 +1673,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 493903161}
+      - m_Target: {fileID: 493903156}
         m_TargetAssemblyTypeName: IconDemoScript, Assembly-CSharp
-        m_MethodName: buttonScript
+        m_MethodName: 
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1690,7 +1684,7 @@ MonoBehaviour:
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
-        m_CallState: 2
+        m_CallState: 0
 --- !u!114 &493903159
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1738,13 +1732,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 493903156}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: da9f84a19cb7f184a9e6a15a7610246b, type: 3}
+  m_Script: {fileID: 11500000, guid: c726259f30547a146a9d2b21f565041f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  roleid: 4
-  anImage: {fileID: 493903159}
-  anIcon: {fileID: 21300000, guid: 3d06d90cf5fe7c2499008a689c9b9d0a, type: 3}
-  TextContainer: {fileID: 939626608}
 --- !u!1 &539498751
 GameObject:
   m_ObjectHideFlags: 0
@@ -1757,9 +1747,10 @@ GameObject:
   - component: {fileID: 539498755}
   - component: {fileID: 539498754}
   - component: {fileID: 539498753}
+  - component: {fileID: 539498756}
   m_Layer: 5
-  m_Name: Actor 9
-  m_TagString: Untagged
+  m_Name: Actor9
+  m_TagString: Actor
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1869,6 +1860,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 539498751}
   m_CullTransparentMesh: 1
+--- !u!114 &539498756
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 539498751}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c726259f30547a146a9d2b21f565041f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &596707860
 GameObject:
   m_ObjectHideFlags: 0
@@ -2424,7 +2427,6 @@ GameObject:
   - component: {fileID: 760286607}
   - component: {fileID: 760286606}
   - component: {fileID: 760286605}
-  - component: {fileID: 760286609}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -2527,18 +2529,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
---- !u!114 &760286609
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 760286604}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7c3eec189fa285846a53900100d44d4a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &786694464
 GameObject:
   m_ObjectHideFlags: 0
@@ -2940,7 +2930,7 @@ GameObject:
   - component: {fileID: 889668474}
   m_Layer: 5
   m_Name: Actor3
-  m_TagString: Untagged
+  m_TagString: Actor
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -3012,9 +3002,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 889668474}
+      - m_Target: {fileID: 889668469}
         m_TargetAssemblyTypeName: IconDemoScript, Assembly-CSharp
-        m_MethodName: buttonScript
+        m_MethodName: 
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -3023,7 +3013,7 @@ MonoBehaviour:
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
-        m_CallState: 2
+        m_CallState: 0
 --- !u!114 &889668472
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3071,13 +3061,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 889668469}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: da9f84a19cb7f184a9e6a15a7610246b, type: 3}
+  m_Script: {fileID: 11500000, guid: c726259f30547a146a9d2b21f565041f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  roleid: 3
-  anImage: {fileID: 889668472}
-  anIcon: {fileID: 21300000, guid: ffc4324a3d808ef47bd7a178740cae29, type: 3}
-  TextContainer: {fileID: 939626608}
 --- !u!1 &911099371
 GameObject:
   m_ObjectHideFlags: 0
@@ -4234,8 +4220,8 @@ GameObject:
   - component: {fileID: 1253364643}
   - component: {fileID: 1253364646}
   m_Layer: 5
-  m_Name: Actor 5
-  m_TagString: Untagged
+  m_Name: Actor5
+  m_TagString: Actor
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -4307,9 +4293,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1253364646}
+      - m_Target: {fileID: 1253364641}
         m_TargetAssemblyTypeName: IconDemoScript, Assembly-CSharp
-        m_MethodName: buttonScript
+        m_MethodName: 
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -4318,7 +4304,7 @@ MonoBehaviour:
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
-        m_CallState: 2
+        m_CallState: 0
 --- !u!114 &1253364644
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4366,13 +4352,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 1253364641}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: da9f84a19cb7f184a9e6a15a7610246b, type: 3}
+  m_Script: {fileID: 11500000, guid: c726259f30547a146a9d2b21f565041f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  roleid: 5
-  anImage: {fileID: 1253364644}
-  anIcon: {fileID: 21300000, guid: a198ce282efb4a24a90f216195168d07, type: 3}
-  TextContainer: {fileID: 939626608}
 --- !u!1 &1254559197
 GameObject:
   m_ObjectHideFlags: 0
@@ -4385,9 +4367,10 @@ GameObject:
   - component: {fileID: 1254559201}
   - component: {fileID: 1254559200}
   - component: {fileID: 1254559199}
+  - component: {fileID: 1254559202}
   m_Layer: 5
-  m_Name: Actor 10
-  m_TagString: Untagged
+  m_Name: Actor10
+  m_TagString: Actor
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -4497,6 +4480,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1254559197}
   m_CullTransparentMesh: 1
+--- !u!114 &1254559202
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1254559197}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c726259f30547a146a9d2b21f565041f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1307159851
 GameObject:
   m_ObjectHideFlags: 0
@@ -4739,8 +4734,8 @@ GameObject:
   - component: {fileID: 1388383966}
   - component: {fileID: 1388383969}
   m_Layer: 5
-  m_Name: Actor 6
-  m_TagString: Untagged
+  m_Name: Actor6
+  m_TagString: Actor
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -4812,9 +4807,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1388383969}
+      - m_Target: {fileID: 1388383964}
         m_TargetAssemblyTypeName: IconScriptPrototype, Assembly-CSharp
-        m_MethodName: dotheankhthing
+        m_MethodName: 
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -4823,7 +4818,7 @@ MonoBehaviour:
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
-        m_CallState: 2
+        m_CallState: 0
 --- !u!114 &1388383967
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4871,13 +4866,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 1388383964}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a74e1bc3e36800046909396da00e0682, type: 3}
+  m_Script: {fileID: 11500000, guid: c726259f30547a146a9d2b21f565041f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  anImage: {fileID: 1388383967}
-  anIcon: {fileID: 21300000, guid: 1b5123f4d5ecb384c96ddcadd30c5cb8, type: 3}
-  TextContainer: {fileID: 939626608}
-  ankh: {fileID: 645650651}
 --- !u!1 &1389728509
 GameObject:
   m_ObjectHideFlags: 0
@@ -5303,9 +5294,10 @@ GameObject:
   - component: {fileID: 1629908007}
   - component: {fileID: 1629908006}
   - component: {fileID: 1629908005}
+  - component: {fileID: 1629908008}
   m_Layer: 5
-  m_Name: Actor 8
-  m_TagString: Untagged
+  m_Name: Actor8
+  m_TagString: Actor
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -5415,6 +5407,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1629908003}
   m_CullTransparentMesh: 1
+--- !u!114 &1629908008
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1629908003}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c726259f30547a146a9d2b21f565041f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1711157426
 GameObject:
   m_ObjectHideFlags: 0
@@ -5679,6 +5683,7 @@ GameObject:
   - component: {fileID: 1776618140}
   - component: {fileID: 1776618139}
   - component: {fileID: 1776618138}
+  - component: {fileID: 1776618141}
   m_Layer: 0
   m_Name: EventSystem
   m_TagString: Untagged
@@ -5735,6 +5740,30 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1776618141
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1776618137}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 66aa52ae29266dd46885d80547804712, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  GeneralPublic: []
+  gamePhase: 0
+  anImage: {fileID: 0}
+  DaySky: {fileID: 786694464}
+  NightSky: {fileID: 911099371}
+  DayNightIcon: {fileID: 396918146}
+  DayIcon: {fileID: 21300000, guid: 0bbe698c72f25b942beb4c4dcdc8fc4b, type: 3}
+  NightIcon: {fileID: 21300000, guid: 32e758a4c1e01b54d894b4e0a20085f9, type: 3}
+  isDay: 1
+  PersonIcon: {fileID: 21300000, guid: 18768603adfa69b4dbe661e688ed7149, type: 3}
+  CompassIcon: {fileID: 21300000, guid: 82c8555d06fb73e478351e99339098a2, type: 3}
+  KnifeIcon: {fileID: 21300000, guid: cc43aa52958d44d4fbc10aefb88024d8, type: 3}
 --- !u!1 &1790902829
 GameObject:
   m_ObjectHideFlags: 0
@@ -5883,10 +5912,9 @@ GameObject:
   - component: {fileID: 1793969046}
   - component: {fileID: 1793969045}
   - component: {fileID: 1793969048}
-  - component: {fileID: 1793969049}
   m_Layer: 5
   m_Name: Actor1
-  m_TagString: Untagged
+  m_TagString: Actor
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -5958,9 +5986,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1793969049}
+      - m_Target: {fileID: 1793969043}
         m_TargetAssemblyTypeName: IconDemoScript, Assembly-CSharp
-        m_MethodName: buttonScript
+        m_MethodName: 
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -5969,7 +5997,7 @@ MonoBehaviour:
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
-        m_CallState: 2
+        m_CallState: 0
 --- !u!114 &1793969046
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6017,29 +6045,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 1793969043}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a74e1bc3e36800046909396da00e0682, type: 3}
+  m_Script: {fileID: 11500000, guid: c726259f30547a146a9d2b21f565041f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  anImage: {fileID: 1793969046}
-  anIcon: {fileID: 21300000, guid: e83dd2f6d3d2538449f544fd9db8c481, type: 3}
-  TextContainer: {fileID: 0}
-  ankh: {fileID: 0}
---- !u!114 &1793969049
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1793969043}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: da9f84a19cb7f184a9e6a15a7610246b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  roleid: 1
-  anImage: {fileID: 1793969046}
-  anIcon: {fileID: 21300000, guid: 82c8555d06fb73e478351e99339098a2, type: 3}
-  TextContainer: {fileID: 939626608}
 --- !u!1 &1891808009
 GameObject:
   m_ObjectHideFlags: 0
@@ -6136,9 +6144,10 @@ GameObject:
   - component: {fileID: 1896974853}
   - component: {fileID: 1896974852}
   - component: {fileID: 1896974851}
+  - component: {fileID: 1896974854}
   m_Layer: 5
-  m_Name: Actor 11
-  m_TagString: Untagged
+  m_Name: Actor11
+  m_TagString: Actor
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -6248,6 +6257,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1896974849}
   m_CullTransparentMesh: 1
+--- !u!114 &1896974854
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1896974849}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c726259f30547a146a9d2b21f565041f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1948717920
 GameObject:
   m_ObjectHideFlags: 0
@@ -6558,10 +6579,9 @@ GameObject:
   - component: {fileID: 1975086006}
   - component: {fileID: 1975086005}
   - component: {fileID: 1975086008}
-  - component: {fileID: 1975086009}
   m_Layer: 5
   m_Name: Actor2
-  m_TagString: Untagged
+  m_TagString: Actor
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -6633,9 +6653,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1975086009}
+      - m_Target: {fileID: 1975086003}
         m_TargetAssemblyTypeName: IconDemoScript, Assembly-CSharp
-        m_MethodName: buttonScript
+        m_MethodName: 
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -6644,7 +6664,7 @@ MonoBehaviour:
           m_FloatArgument: 0
           m_StringArgument: This is a test.
           m_BoolArgument: 0
-        m_CallState: 2
+        m_CallState: 0
 --- !u!114 &1975086006
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6692,26 +6712,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 1975086003}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fb9c06192a5d90b459841ed0d00f6dbf, type: 3}
+  m_Script: {fileID: 11500000, guid: c726259f30547a146a9d2b21f565041f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TextContainer: {fileID: 939626608}
---- !u!114 &1975086009
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1975086003}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: da9f84a19cb7f184a9e6a15a7610246b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  roleid: 2
-  anImage: {fileID: 1975086006}
-  anIcon: {fileID: 21300000, guid: cc43aa52958d44d4fbc10aefb88024d8, type: 3}
-  TextContainer: {fileID: 939626608}
 --- !u!1 &1981873897
 GameObject:
   m_ObjectHideFlags: 0
@@ -6945,8 +6948,8 @@ GameObject:
   - component: {fileID: 2059456177}
   - component: {fileID: 2059456180}
   m_Layer: 5
-  m_Name: Actor 7
-  m_TagString: Untagged
+  m_Name: Actor7
+  m_TagString: Actor
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -7018,10 +7021,10 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2059456180}
+      - m_Target: {fileID: 2059456175}
         m_TargetAssemblyTypeName: ButtonScript, Assembly-CSharp
-        m_MethodName: LoadScene
-        m_Mode: 5
+        m_MethodName: 
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -7029,7 +7032,7 @@ MonoBehaviour:
           m_FloatArgument: 0
           m_StringArgument: TitleScene
           m_BoolArgument: 0
-        m_CallState: 2
+        m_CallState: 0
 --- !u!114 &2059456178
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7077,6 +7080,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 2059456175}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3f3d3d56d4f7a414884b8fbdaaf712dd, type: 3}
+  m_Script: {fileID: 11500000, guid: c726259f30547a146a9d2b21f565041f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
