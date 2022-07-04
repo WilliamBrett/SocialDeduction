@@ -5,15 +5,23 @@ using UnityEngine.UI;
 
 public class ActorScript : MonoBehaviour
 {
+    private CoreGameScript CoreScript;
     private Image ActorImage;
 
     public void Start()
     {
-        ActorImage = this.GetComponent<Image>();
+        //ActorImage = this.GetComponent<Image>();
+        CoreScript = GameObject.FindGameObjectWithTag("EventSystem").GetComponent<CoreGameScript>();
+
     }
 
-        public void swapSprite(Sprite swapIn)
+    public void SwapSprite(Sprite swapIn)
     {
         ActorImage.sprite = swapIn;
+    }
+
+    public void ButtonClicked()
+    {
+        CoreScript.ButtonClicked(int.Parse(name) - 1);
     }
 }

@@ -10,10 +10,10 @@ public class CoreGameScript : MonoBehaviour
 
     //General delcarations
     public static CoreGameScript current;
-    public event Action onActorTrigger;
     public GameObject[] GeneralPublic;
-    public int gamePhase;
-    public Image anImage; //used to specify images for alteration
+    public GameObject Textbox;
+    public int GamePhase;
+    private Image anImage; //used to specify images for alteration
 
     //day & night declerations
     public GameObject DaySky;
@@ -35,13 +35,16 @@ public class CoreGameScript : MonoBehaviour
         current = this;
         DontDestroyOnLoad(gameObject);
     }
+    
     // Start is called before the first frame update
-
     void Start()
     {
-        gamePhase = 1;
+        GamePhase = 1;
         GeneralPublic = GameObject.FindGameObjectsWithTag("Actor");
-        changeSprite(0, CompassIcon);
+        Textbox = GameObject.FindGameObjectWithTag("Textbox");
+        ChangeSprite(0, CompassIcon);
+        TextboxAppend("test");
+        //TextBox.
     }
 
     // Update is called once per frame
@@ -50,17 +53,13 @@ public class CoreGameScript : MonoBehaviour
 
     }
 
-    public void changeSprite(int refId, Sprite swapIn)
+    public void ChangeSprite(int refId, Sprite swapIn)
     {
         anImage = GeneralPublic[refId].GetComponent<Image>();
         anImage.sprite = swapIn;
     }
 
-    public event Action eventAction;
-    public void triggerExampleAction()
-    {
-        eventAction?.Invoke();
-    }
+    public void TextboxAppend(string textToAdd) => Textbox?.GetComponent<TextboxScript>().AddText(textToAdd);
 
     public void DayToNight()
     {
@@ -77,6 +76,12 @@ public class CoreGameScript : MonoBehaviour
         DayNightIcon.sprite = DayIcon;
         isDay = true;
 
+    }
+
+    public void ButtonClicked(int buttonID)
+    {
+
+        TextboxAppend("Button " + buttonID.ToString() + " pressed");
     }
 
 }

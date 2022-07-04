@@ -2787,8 +2787,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 972109817}
   m_HandleRect: {fileID: 972109816}
   m_Direction: 2
-  m_Value: -0.000018433648
-  m_Size: 0.9700808
+  m_Value: 0.34615386
+  m_Size: 0.99999815
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -3382,7 +3382,7 @@ GameObject:
   - component: {fileID: 939626614}
   m_Layer: 5
   m_Name: TextContainer
-  m_TagString: Untagged
+  m_TagString: Textbox
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -3404,8 +3404,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 13.244812}
-  m_SizeDelta: {x: 583, y: 885.337}
+  m_AnchoredPosition: {x: 0, y: 0.0002746582}
+  m_SizeDelta: {x: 583, y: 858.85}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &939626611
 MonoBehaviour:
@@ -3490,7 +3490,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 0, y: 14.404053, z: 0, w: 27.83435}
+  m_margin: {x: 0, y: 14.404053, z: 0, w: 18.251434}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
@@ -3527,10 +3527,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 939626608}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fb9c06192a5d90b459841ed0d00f6dbf, type: 3}
+  m_Script: {fileID: 11500000, guid: 7c063614ab6e36c468465df5e4c477c7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TextContainer: {fileID: 0}
 --- !u!1 &951326311
 GameObject:
   m_ObjectHideFlags: 0
@@ -5686,7 +5685,7 @@ GameObject:
   - component: {fileID: 1776618141}
   m_Layer: 0
   m_Name: EventSystem
-  m_TagString: Untagged
+  m_TagString: EventSystem
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -5753,8 +5752,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   GeneralPublic: []
-  gamePhase: 0
-  anImage: {fileID: 0}
+  Textbox: {fileID: 0}
+  GamePhase: 0
   DaySky: {fileID: 786694464}
   NightSky: {fileID: 911099371}
   DayNightIcon: {fileID: 396918146}
@@ -5986,9 +5985,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1793969043}
-        m_TargetAssemblyTypeName: IconDemoScript, Assembly-CSharp
-        m_MethodName: 
+      - m_Target: {fileID: 1793969048}
+        m_TargetAssemblyTypeName: ActorScript, Assembly-CSharp
+        m_MethodName: ButtonClicked
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -5997,7 +5996,7 @@ MonoBehaviour:
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
-        m_CallState: 0
+        m_CallState: 2
 --- !u!114 &1793969046
 MonoBehaviour:
   m_ObjectHideFlags: 0
