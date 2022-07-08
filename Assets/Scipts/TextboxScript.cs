@@ -18,3 +18,4 @@ public class TextboxScript : MonoBehaviour
         textMeshPro.text += textToAdd;
     }
 }
+

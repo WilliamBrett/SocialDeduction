@@ -7,6 +7,7 @@ public class ActorScript : MonoBehaviour
 {
     private CoreGameScript CoreScript;
     private Image ActorImage;
+    public int ActorId;
 
     public void Start()
     {
@@ -22,6 +23,8 @@ public class ActorScript : MonoBehaviour
 
     public void ButtonClicked()
     {
-        CoreScript.ButtonClicked(int.Parse(name) - 1);
+        int thisId = 0;
+        //CoreScript.ButtonClicked(int.Parse(name) - 1);
+        CoreScript.ButtonClicked(thisId);
     }
 }

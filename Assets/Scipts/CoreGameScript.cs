@@ -35,22 +35,26 @@ public class CoreGameScript : MonoBehaviour
         current = this;
         DontDestroyOnLoad(gameObject);
     }
-    
+
     // Start is called before the first frame update
     void Start()
     {
         GamePhase = 1;
         GeneralPublic = GameObject.FindGameObjectsWithTag("Actor");
         Textbox = GameObject.FindGameObjectWithTag("Textbox");
-        ChangeSprite(0, CompassIcon);
-        TextboxAppend("test");
-        //TextBox.
+        startTest();
     }
 
     // Update is called once per frame
     void Update()
     {
 
+    }
+
+    public void startTest()
+    {
+        ChangeSprite(0, CompassIcon);
+        TextboxAppend("test");
     }
 
     public void ChangeSprite(int refId, Sprite swapIn)
@@ -60,6 +64,10 @@ public class CoreGameScript : MonoBehaviour
     }
 
     public void TextboxAppend(string textToAdd) => Textbox?.GetComponent<TextboxScript>().AddText(textToAdd);
+    public void TextboxAppend2(string textToAdd)
+    {
+        Textbox?.GetComponent<TextboxScript>().AddText(textToAdd);
+    }
 
     public void DayToNight()
     {
@@ -80,8 +88,11 @@ public class CoreGameScript : MonoBehaviour
 
     public void ButtonClicked(int buttonID)
     {
-
-        TextboxAppend("Button " + buttonID.ToString() + " pressed");
+        //string stringAppend = "Button ";
+        //stringAppend += buttonID.ToString();
+        //stringAppend += " pressed";
+        TextboxAppend("Button " + buttonID.ToString() + " pressed");//buttonID
+        //startTest();
     }
 
 }
