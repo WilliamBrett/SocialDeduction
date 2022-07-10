@@ -23,8 +23,7 @@ public class ActorScript : MonoBehaviour
 
     public void ButtonClicked()
     {
-        int thisId = 0;
         //CoreScript.ButtonClicked(int.Parse(name) - 1);
-        CoreScript.ButtonClicked(thisId);
+        CoreScript.ButtonClicked(ActorId);
     }
 }
