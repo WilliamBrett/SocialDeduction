@@ -8,6 +8,7 @@ public class ActorScript : MonoBehaviour
     private CoreGameScript CoreScript;
     private Image ActorImage;
     public int ActorId;
+    public GameObject ankh;
 
     public void Start()
     {
@@ -25,5 +26,10 @@ public class ActorScript : MonoBehaviour
     {
         //CoreScript.ButtonClicked(int.Parse(name) - 1);
         CoreScript.ButtonClicked(ActorId);
+    }
+
+    public void EnableAnkh()
+    {
+        ankh.SetActive(true);
     }
 }

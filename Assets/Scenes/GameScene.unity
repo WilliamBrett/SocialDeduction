@@ -492,6 +492,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ActorId: 11
+  ankh: {fileID: 1357030577}
 --- !u!1 &147975084
 GameObject:
   m_ObjectHideFlags: 0
@@ -723,7 +724,7 @@ GameObject:
   - component: {fileID: 272923420}
   - component: {fileID: 272923419}
   m_Layer: 5
-  m_Name: InvAnkh10
+  m_Name: Ankh9
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1106,7 +1107,7 @@ GameObject:
   - component: {fileID: 357864114}
   - component: {fileID: 357864113}
   m_Layer: 5
-  m_Name: InvAnkh8
+  m_Name: Ankh7
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1182,7 +1183,7 @@ GameObject:
   - component: {fileID: 357885406}
   - component: {fileID: 357885405}
   m_Layer: 5
-  m_Name: InvAnkh7
+  m_Name: Ankh6
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1749,6 +1750,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ActorId: 3
+  ankh: {fileID: 1948717920}
 --- !u!1 &539498751
 GameObject:
   m_ObjectHideFlags: 0
@@ -1899,6 +1901,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ActorId: 8
+  ankh: {fileID: 1347838776}
 --- !u!1 &596707860
 GameObject:
   m_ObjectHideFlags: 0
@@ -2294,7 +2297,7 @@ GameObject:
   - component: {fileID: 645650654}
   - component: {fileID: 645650653}
   m_Layer: 5
-  m_Name: InvAnkh6
+  m_Name: Ankh5
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3092,6 +3095,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ActorId: 2
+  ankh: {fileID: 1181698562}
 --- !u!1 &911099371
 GameObject:
   m_ObjectHideFlags: 0
@@ -3773,7 +3777,7 @@ GameObject:
   - component: {fileID: 1043001111}
   - component: {fileID: 1043001110}
   m_Layer: 5
-  m_Name: InvAnkh2
+  m_Name: Ankh1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3849,7 +3853,7 @@ GameObject:
   - component: {fileID: 1107653401}
   - component: {fileID: 1107653400}
   m_Layer: 5
-  m_Name: InvAnkh1
+  m_Name: Ankh0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3925,7 +3929,7 @@ GameObject:
   - component: {fileID: 1163341970}
   - component: {fileID: 1163341969}
   m_Layer: 5
-  m_Name: InvAnkh5
+  m_Name: Ankh4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4001,7 +4005,7 @@ GameObject:
   - component: {fileID: 1181698565}
   - component: {fileID: 1181698564}
   m_Layer: 5
-  m_Name: InvAnkh3
+  m_Name: Ankh2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4383,6 +4387,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ActorId: 4
+  ankh: {fileID: 1163341967}
 --- !u!1 &1254559197
 GameObject:
   m_ObjectHideFlags: 0
@@ -4533,6 +4538,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ActorId: 9
+  ankh: {fileID: 272923417}
 --- !u!1 &1307159851
 GameObject:
   m_ObjectHideFlags: 0
@@ -4545,7 +4551,7 @@ GameObject:
   - component: {fileID: 1307159854}
   - component: {fileID: 1307159853}
   m_Layer: 5
-  m_Name: InvAnkh11
+  m_Name: Ankh10
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4621,7 +4627,7 @@ GameObject:
   - component: {fileID: 1347838779}
   - component: {fileID: 1347838778}
   m_Layer: 5
-  m_Name: InvAnkh9
+  m_Name: Ankh8
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4697,7 +4703,7 @@ GameObject:
   - component: {fileID: 1357030580}
   - component: {fileID: 1357030579}
   m_Layer: 5
-  m_Name: InvAnkh12
+  m_Name: Ankh11
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4911,6 +4917,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ActorId: 5
+  ankh: {fileID: 645650651}
 --- !u!1 &1389728509
 GameObject:
   m_ObjectHideFlags: 0
@@ -5474,6 +5481,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ActorId: 7
+  ankh: {fileID: 357864111}
 --- !u!1 &1711157426
 GameObject:
   m_ObjectHideFlags: 0
@@ -5807,9 +5815,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 66aa52ae29266dd46885d80547804712, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GeneralPublic: []
-  Textbox: {fileID: 0}
+  CountOfHeads: []
   GamePhase: 0
+  ActorQuantity: 12
   DaySky: {fileID: 786694464}
   NightSky: {fileID: 911099371}
   DayNightIcon: {fileID: 396918146}
@@ -6104,6 +6112,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ActorId: 0
+  ankh: {fileID: 0}
 --- !u!1 &1891808009
 GameObject:
   m_ObjectHideFlags: 0
@@ -6338,6 +6347,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ActorId: 10
+  ankh: {fileID: 1307159851}
 --- !u!1 &1948717920
 GameObject:
   m_ObjectHideFlags: 0
@@ -6350,7 +6360,7 @@ GameObject:
   - component: {fileID: 1948717923}
   - component: {fileID: 1948717922}
   m_Layer: 5
-  m_Name: InvAnkh4
+  m_Name: Ankh3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6785,6 +6795,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ActorId: 1
+  ankh: {fileID: 1043001108}
 --- !u!1 &1981873897
 GameObject:
   m_ObjectHideFlags: 0
@@ -7154,3 +7165,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ActorId: 6
+  ankh: {fileID: 357885403}

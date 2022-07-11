@@ -14,16 +14,22 @@ public class CoreGameScript : MonoBehaviour
     //public GameObject[] AddressBook;
     public GameObject[] CountOfHeads;
     Actor[] GeneralPublic;
+    Actor[] LivingPublic;
     //public ActorProperties[] 
     private GameObject Textbox;
     public int GamePhase;
     private Image anImage; //used to specify images for alteration
     private int PhaseDelay; //PD-- on Update(), on 0 trigers change of phase
+    private int MicroDelay = 1;
     private int ShortDelay = 250; //This setting controls the length of a "short" timed delay
     private int StandardDelay = 500; //This setting controls the length of a "normal" tomed delay
     private int LongDelay = 750;
     private readonly string[] NameRegistry = { "Ace", "Barbara", "Boris", "Caleb", "David", "Elizabeth", "James", "Jennifer", "Jessica", "John", "Joseph", "Linda", "Mary", "Michael", "Patricia", "Patrick", "Richard", "Robert", "Sarah", "Susan", "Thomas", "William" };
+    private int[] Hat; //This is used to talley votes
+    private int HatSize;
+    private int[] VoteTalley;
     public int ActorQuantity = 12;
+    private int rng; //used for random decisions
 
     //day & night declerations
     public GameObject DaySky;
@@ -74,10 +80,11 @@ public class CoreGameScript : MonoBehaviour
         string[] UnusedNames = NameRegistry;
         for (int i = 1; i < ActorQuantity; i++)
         {
-            int rng = UnityEngine.Random.Range(0, UnusedNames.Length - 1);
+            rng = UnityEngine.Random.Range(0, UnusedNames.Length - 1);
             GeneralPublic[i].Name = UnusedNames[rng];
             UnusedNames = UnusedNames.Where(w => w != UnusedNames[rng]).ToArray();
         }
+        //ActorsRemaining = ActorQuantity;
     }
 
     /*void gameBoardSetup()
@@ -131,25 +138,214 @@ public class CoreGameScript : MonoBehaviour
 
     public void ButtonClicked(int buttonID)
     {
-        //string stringAppend = "Button ";
-        //stringAppend += buttonID.ToString();
-        //stringAppend += " pressed";
         TextboxAppend("Button " + buttonID.ToString() + " pressed");//buttonID
-        //startTest();
+        switch (GamePhase)
+        {
+
+        }
+    }
+
+    int Talleyvotes(int PlayerVote)
+    {
+        int accused = 0;
+        return accused;
+    }
+
+    void ActorStatement(int ActorID)
+    { //
+        int decision = GeneralPublic[ActorID].Accuse();
+        if (decision != -1){
+            if (decision != -2)
+            {
+                TextboxAppend(GeneralPublic[ActorID].Name + " accuses "  + GeneralPublic[decision].Name + " of murder!");
+                for (int i = 1; i < GeneralPublic.Length; i++)
+                {
+                    GeneralPublic[i].AddAmnity(decision,1);
+                }
+                PhaseDelay = ShortDelay;
+            }
+            else
+            {
+                PhaseDelay = MicroDelay;
+            }
+        }
+        else
+        {
+            PhaseDelay = MicroDelay;
+        }
+    }
+
+    void ActorVote(int ActorID)
+    {
+        int decision = GeneralPublic[ActorID].Accuse();
+        if (decision == -1)
+        {
+            TextboxAppend(GeneralPublic[ActorID].Name + " abstains from voting.");
+        }
+        else if (decision != -2)
+        {
+            TextboxAppend(GeneralPublic[ActorID].Name + " votes for " + GeneralPublic[decision].Name);
+            VoteTalley[decision]++;
+        }
+    }
+
+    void setupHat()
+    {
+        Hat = new int[GeneralPublic.Length];
+        for (int i = 1; i < GeneralPublic.Length; i++)
+        {
+            
+            Hat[i] = i;
+        }
+    }
+
+    void setupVoteTalley()
+    {
+        VoteTalley = new int[GeneralPublic.Length];
+        for (int i = 1; i < GeneralPublic.Length; i++)
+        {
+            VoteTalley[i] = 0;
+        }
+    }
+
+    void TalleyVote()
+    {
+        if (VoteTalley.Max() >= 3)
+        {
+            Execution(Array.IndexOf(VoteTalley, VoteTalley.Max()));
+        }
+    }
+    
+    void Execution(int executee)
+    {
+        TextboxAppend(GeneralPublic[executee].Name + " has been found guilty. They are swiftly executed...");
+        GeneralPublic[executee].Death();
+        for (int i = 1; i < GeneralPublic.Length; i++)
+        {
+            GeneralPublic[i].DropSuspicion(executee);
+        }
+
     }
 
     public void ProgressPhase()
     {
         switch (GamePhase)
         {
-            case 1: GamePhase = 15; break;
-            case 15: GamePhase = 2; break;
-            case 2: GamePhase = 25; break;
-            case 25: GamePhase = 3; break;
-            case 3: GamePhase = 35; break;
-            case 35: GamePhase = 4; break;
-            case 4: GamePhase = 45; break;
-            case 45: GamePhase = 1; break;
+            case 1: //mid-announcement
+                //TextboxAppend("Announcement");
+                PhaseDelay = MicroDelay;
+                GamePhase = 11; 
+                break;
+            case 11: //post-statement
+                //TextboxAppend("debug: post-statement");
+                PhaseDelay = MicroDelay;
+                GamePhase = 19; 
+                break;
+            case 19:
+                setupHat();
+                TextboxAppend("The time has come for announcements, there is a pause to see if anyone steps forward...");
+                GamePhase = 2;
+                PhaseDelay = MicroDelay;
+                break;
+            case 2: //statements
+                //TextboxAppend("debug: statements");
+                //This picks a random name out of the hat, then removes it from the hat
+                if (Hat.Length != 0)
+                {
+                    rng = UnityEngine.Random.Range(1, Hat.Length) - 1;
+                    if (Hat[rng] == 0){
+                        Hat = Hat.Where(w => w != Hat[rng]).ToArray();
+                        PhaseDelay = MicroDelay;
+                        GamePhase = 200; 
+                        break;}
+                    else if (GeneralPublic[rng].Alive)
+                    {
+                        
+                        //TextboxAppend("RNG is: " + rng + ", Hat size is " + Hat.Length);
+                        ActorStatement(Hat[rng]);
+                        Hat = Hat.Where(w => w != Hat[rng]).ToArray();
+                    }
+                    else
+                    {
+                        PhaseDelay = MicroDelay;
+                    }
+                }
+                else
+                {
+                    //TextboxAppend("debug: hat acknowledged as empty");
+                    PhaseDelay = MicroDelay;
+                    GamePhase = 21;
+                }
+                //GamePhase = 21;
+                //TextboxAppend("debug: hat size is " + Hat.Length);
+                break;
+            case 200: //player's turn to make a statement
+                TextboxAppend("debug: the player makes no statement");
+                PhaseDelay = MicroDelay;
+                GamePhase = 2;
+                break;
+            case 21: //post-statement
+                     //TextboxAppend("debug: post-statement");
+                PhaseDelay = MicroDelay;
+                GamePhase = 29; 
+                break;
+            case 29:
+                setupHat();
+                setupVoteTalley();
+                GamePhase = 3;
+                PhaseDelay = ShortDelay;
+                break;
+            case 3: //Mid-votes
+                //TextboxAppend("debug: Votes");
+                HatSize = Hat.Length;
+                if (Hat.Length != 0)
+                {
+                    rng = UnityEngine.Random.Range(1, Hat.Length) - 1;
+                    if (Hat[rng] == 0) {
+                        Hat = Hat.Where(w => w != Hat[rng]).ToArray();
+                        GamePhase = 300;
+                        PhaseDelay = ShortDelay;
+                        break; }
+                    //if (GeneralPublic[i].ali
+                    if (GeneralPublic[rng].Alive) ActorVote(Hat[rng]);
+                    Hat = Hat.Where(w => w != Hat[rng]).ToArray();
+                }
+                else
+                {
+                    GamePhase = 31;
+                }
+                PhaseDelay = ShortDelay;
+                
+                break;
+            case 300: //player's turn to vote
+                TextboxAppend("debug: the player makes no vote");
+                PhaseDelay = ShortDelay;
+                GamePhase = 3;
+                break;
+            case 31: //post-vote
+                TalleyVote();
+                PhaseDelay = ShortDelay;
+                GamePhase = 4; 
+                break;
+            case 4: //Intermission ending
+                //TextboxAppend("debug: Intermission");
+                DayToNight();
+                TextboxAppend("The night is peaceful enough, though in the silence the paranoia of the villagers only grows...");
+                for (int i = 1; i < GeneralPublic.Length; i++)
+                {
+                    GeneralPublic[i].Paranoia();
+                }
+                PhaseDelay = LongDelay;
+                GamePhase = 41; 
+                break;
+            case 41: //post-intermission
+                //TextboxAppend("debug: post-intermission");
+                NighttoDay();
+                PhaseDelay = MicroDelay;
+                GamePhase = 1; 
+                break;
+            case 400: //player's turn to night action
+                break;
             case 100:
                 TextboxAppend("You have arrived in a town along you journey, with " + (GeneralPublic.Length - 1).ToString() + " inhabitants.");
                 GamePhase = 101;
@@ -163,8 +359,10 @@ public class CoreGameScript : MonoBehaviour
             case 102:
                 TextboxAppend("...Except you. In absense, your innocence is proven. You are an outsider, and have been asked to help find the culpret before resuming your journey.");
                 ChangeSprite(0, CompassIcon);
-                GamePhase = 15;
-                PhaseDelay = LongDelay;
+                //GamePhase = 15;
+                TextboxAppend("debug: Dropping into the first statement");
+                GamePhase = 19;
+               PhaseDelay = LongDelay;
                 break;
         }
     }
@@ -215,21 +413,68 @@ class Actor
     public string Name;
     public int ID;
     public string Role;
-    public int[] amnity;
+    public int[] Amnity;
     public GameObject Avatar;
+    public int[] Suspicion;
+    public int Suspect; //This is used by special roles, where an actor identified a suspect
+    public bool Alive;
     //private Random random;
     public Actor(int ActorNum, int totalActors)
     {
         this.ID = ActorNum;
-        this.amnity = new int[totalActors];
+        this.Amnity = new int[totalActors];
+        this.Suspicion = new int[totalActors];
+        this.Alive = true;
         SetAmnity(totalActors);
     }
-    public void SetAmnity(int ActorNum)
+    public void SetAmnity(int totalActors)
     {
-        amnity[0] = 0;
-        for (int i = 1; i < ActorNum; i++)
+        Amnity[0] = 0;
+        for (int i = 1; i < totalActors; i++)
         {
-            amnity[i] = UnityEngine.Random.Range(1, 5);
+            Amnity[i] = UnityEngine.Random.Range(1, 5);
         }
+        Amnity[this.ID] = -1;
+        Suspicion = Amnity;
+    }
+    public void AddAmnity(int ActorNum, int ammount)
+    { //Adds a point of amnity, if amnity >= 4 than adds a point of suspicion. 
+        if (Amnity[ActorNum] == -1) return;
+        Amnity[ActorNum] += ammount;
+        if (Amnity[ActorNum] >= 5)
+        {
+            this.Suspicion[ActorNum] += ammount;
+        }
+    }
+    public void Paranoia()
+    {
+        //during the night phase, the actors become more slightly more suspicious of all other actors
+        for (int i = 1; i < Suspicion.Length; i++)
+        {
+            AddSuspicion(i, 1);
+        }
+    }
+    public void AddSuspicion(int ActorNum, int ammount)
+    { //Adds suspicion, increasing the possibility of an accusation
+        if (Amnity[ActorNum] == -1) return;
+        this.Suspicion[ActorNum] += ammount;
+    }
+    public void DropSuspicion(int ActorNum)
+    { //If an actor is found innocent, or is dead, all accumulated suspicion is lost
+        this.Amnity[ActorNum] = -1;
+    }
+    public int Accuse()
+    { //Returns an actor this actor is suspicious of
+        if (!Alive) return -2;
+        if (Suspicion.Max() > 4)
+        {
+            return Array.IndexOf(Suspicion, Suspicion.Max());
+        }
+        return -1;
+    }
+    public void Death()
+    {
+        this.Alive = false;
+        this.Avatar.GetComponent<ActorScript>().EnableAnkh();
     }
 }
