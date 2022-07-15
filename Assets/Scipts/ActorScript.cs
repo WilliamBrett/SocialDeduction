@@ -7,7 +7,7 @@ public class ActorScript : MonoBehaviour
 {
     private CoreGameScript CoreScript;
     private Image ActorImage;
-    public int ActorId;
+    public int ActorId; //hardcoded, set dynamic?
     public GameObject ankh;
 
     public void Start()
@@ -15,6 +15,11 @@ public class ActorScript : MonoBehaviour
         //ActorImage = this.GetComponent<Image>();
         CoreScript = GameObject.FindGameObjectWithTag("EventSystem").GetComponent<CoreGameScript>();
 
+    }
+
+    public void SetActorId(int ID)
+    {
+        this.ActorId = ID;
     }
 
     public void SwapSprite(Sprite swapIn)

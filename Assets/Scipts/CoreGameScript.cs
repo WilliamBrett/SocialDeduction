@@ -45,6 +45,7 @@ public class CoreGameScript : MonoBehaviour
     public Sprite CompassIcon;
     public Sprite KnifeIcon;
 
+    public bool debug = false;
 
     private void Awake()
     {
@@ -63,6 +64,8 @@ public class CoreGameScript : MonoBehaviour
         for (int i = 0; i < ActorQuantity; i++)
         {
             GeneralPublic[i].Avatar = CountOfHeads[i];
+            GeneralPublic[i].SetupAvatar();
+            
         }
         //gameBoardSetup();
     }
@@ -75,7 +78,7 @@ public class CoreGameScript : MonoBehaviour
         GeneralPublic = new Actor[ActorQuantity];
         for (int i = 0; i < ActorQuantity; i++)
         {
-            GeneralPublic[i] = new Actor(i, ActorQuantity);
+            GeneralPublic[i] = new Actor(i, ActorQuantity, PersonIcon);
         }
         string[] UnusedNames = NameRegistry;
         for (int i = 1; i < ActorQuantity; i++)
@@ -114,10 +117,6 @@ public class CoreGameScript : MonoBehaviour
     }
 
     public void TextboxAppend(string textToAdd) => Textbox?.GetComponent<TextboxScript>().AddText("\n" + textToAdd);
-    public void TextboxAppend2(string textToAdd)
-    {
-        Textbox?.GetComponent<TextboxScript>().AddText(textToAdd);
-    }
 
     public void DayToNight()
     {
@@ -141,7 +140,13 @@ public class CoreGameScript : MonoBehaviour
         TextboxAppend("Button " + buttonID.ToString() + " pressed");//buttonID
         switch (GamePhase)
         {
+            case 200://player's statement
 
+                break;
+            case 300://player's vote
+                break;
+            case 400://player's night action
+                break;
         }
     }
 
@@ -149,6 +154,16 @@ public class CoreGameScript : MonoBehaviour
     {
         int accused = 0;
         return accused;
+    }
+
+    int CurrentlyAlive()
+    {
+        int j = 0;
+        for (int i = 0; i < GeneralPublic.Length; i++)
+        {
+            if (GeneralPublic[i].Alive) j++;
+        }
+        return j;
     }
 
     void ActorStatement(int ActorID)
@@ -210,7 +225,7 @@ public class CoreGameScript : MonoBehaviour
 
     void TalleyVote()
     {
-        if (VoteTalley.Max() >= 3)
+        if (VoteTalley.Max() >=  (CurrentlyAlive() / 2))
         {
             Execution(Array.IndexOf(VoteTalley, VoteTalley.Max()));
         }
@@ -280,9 +295,13 @@ public class CoreGameScript : MonoBehaviour
                 //TextboxAppend("debug: hat size is " + Hat.Length);
                 break;
             case 200: //player's turn to make a statement
-                TextboxAppend("debug: the player makes no statement");
-                PhaseDelay = MicroDelay;
-                GamePhase = 2;
+                if (debug)
+                {
+                    PhaseDelay = MicroDelay;
+                    GamePhase = 2;
+                    break;
+                }
+                TextboxAppend("Do you wish to accuse any of the villagers?./n(Click on the villager you would like to accuse, or yourself to accuse nobody)");
                 break;
             case 21: //post-statement
                      //TextboxAppend("debug: post-statement");
@@ -318,9 +337,14 @@ public class CoreGameScript : MonoBehaviour
                 
                 break;
             case 300: //player's turn to vote
-                TextboxAppend("debug: the player makes no vote");
-                PhaseDelay = ShortDelay;
-                GamePhase = 3;
+                if (debug)
+                {
+                    PhaseDelay = MicroDelay;
+                    GamePhase = 3;
+                    break;
+                }
+                TextboxAppend("The time has come for you to vote./n(Click on the villager you would like to accuse, or yourself to accuse nobody)");
+                
                 break;
             case 31: //post-vote
                 TalleyVote();
@@ -358,11 +382,16 @@ public class CoreGameScript : MonoBehaviour
                 break;
             case 102:
                 TextboxAppend("...Except you. In absense, your innocence is proven. You are an outsider, and have been asked to help find the culpret before resuming your journey.");
-                ChangeSprite(0, CompassIcon);
+                GeneralPublic[0].SetIcon(CompassIcon);
                 //GamePhase = 15;
-                TextboxAppend("debug: Dropping into the first statement");
-                GamePhase = 19;
+                //TextboxAppend("debug: Dropping into the first statement");
+                GamePhase = 103;
                PhaseDelay = LongDelay;
+                break;
+            case 103:
+                TextboxAppend("Soon the sun sets, and darkness blankets the town");
+                 GamePhase = 4;
+                PhaseDelay = ShortDelay;
                 break;
         }
     }
@@ -418,13 +447,15 @@ class Actor
     public int[] Suspicion;
     public int Suspect; //This is used by special roles, where an actor identified a suspect
     public bool Alive;
+    public Sprite Icon;
     //private Random random;
-    public Actor(int ActorNum, int totalActors)
+    public Actor(int ActorNum, int totalActors, Sprite StartingIcon)
     {
         this.ID = ActorNum;
         this.Amnity = new int[totalActors];
         this.Suspicion = new int[totalActors];
         this.Alive = true;
+        this.Icon = StartingIcon;
         SetAmnity(totalActors);
     }
     public void SetAmnity(int totalActors)
@@ -476,5 +507,19 @@ class Actor
     {
         this.Alive = false;
         this.Avatar.GetComponent<ActorScript>().EnableAnkh();
+    }
+    public void SetIcon(Sprite InIcon)
+    {
+        this.Icon = InIcon;
+        this.Avatar.GetComponent<ActorScript>().SwapSprite(this.Icon);
+    }
+    public void SetupAvatar()
+    {
+        this.Avatar.GetComponent<ActorScript>().SetActorId(this.ID);
+        this.Avatar.GetComponent<ActorScript>().SwapSprite(this.Icon);
+        if (!this.Alive)
+        {
+            this.Avatar.GetComponent<ActorScript>().EnableAnkh();
+        }
     }
 }
