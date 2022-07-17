@@ -13,17 +13,16 @@ public class CoreGameScript : MonoBehaviour
     public static CoreGameScript current;
     //public GameObject[] AddressBook;
     public GameObject[] CountOfHeads;
-    Actor[] GeneralPublic;
-    Actor[] LivingPublic;
+    private Actor[] GeneralPublic;
     //public ActorProperties[] 
     private GameObject Textbox;
     public int GamePhase;
     private Image anImage; //used to specify images for alteration
     private int PhaseDelay; //PD-- on Update(), on 0 trigers change of phase
     private int MicroDelay = 1;
-    private int ShortDelay = 250; //This setting controls the length of a "short" timed delay
-    private int StandardDelay = 500; //This setting controls the length of a "normal" tomed delay
-    private int LongDelay = 750;
+    private int ShortDelay = 25;//250 //This setting controls the length of a "short" timed delay
+    private int StandardDelay = 50;//500 //This setting controls the length of a "normal" tomed delay
+    private int LongDelay = 75;//750
     private readonly string[] NameRegistry = { "Ace", "Barbara", "Boris", "Caleb", "David", "Elizabeth", "James", "Jennifer", "Jessica", "John", "Joseph", "Linda", "Mary", "Michael", "Patricia", "Patrick", "Richard", "Robert", "Sarah", "Susan", "Thomas", "William" };
     private int[] Hat; //This is used to talley votes
     private int HatSize;
@@ -45,7 +44,9 @@ public class CoreGameScript : MonoBehaviour
     public Sprite CompassIcon;
     public Sprite KnifeIcon;
 
-    public bool debug = false;
+    public int testint;
+
+    public bool debug;
 
     private void Awake()
     {
@@ -55,17 +56,25 @@ public class CoreGameScript : MonoBehaviour
     }
 
     // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
+        Console.WriteLine("Debug: Start");
         //GeneralPublic = GameObject.FindGameObjectsWithTag("Actor");
         CountOfHeads = GameObject.FindGameObjectsWithTag("Actor");
         Textbox = GameObject.FindGameObjectWithTag("Textbox");
         //startTest();
+        testint = 0;
         for (int i = 0; i < ActorQuantity; i++)
         {
             GeneralPublic[i].Avatar = CountOfHeads[i];
-            GeneralPublic[i].SetupAvatar();
+            GeneralPublic[i].SetupAvatar(PersonIcon);
+            //Console.WriteLine("Actor " + i + " setup.");
+        }
+        for (int i = 0; i < ActorQuantity; i++)
+        {
             
+            //Console.WriteLine("Actor " + i + " setup.");
+            testint++;
         }
         //gameBoardSetup();
     }
@@ -141,9 +150,10 @@ public class CoreGameScript : MonoBehaviour
         switch (GamePhase)
         {
             case 200://player's statement
-
+                PlayerStatement(buttonID);
                 break;
             case 300://player's vote
+                PlayerVote(buttonID);
                 break;
             case 400://player's night action
                 break;
@@ -166,16 +176,32 @@ public class CoreGameScript : MonoBehaviour
         return j;
     }
 
+    void PlayerStatement(int ActorID)
+    {
+        if (ActorID != 0)
+        {
+            TextboxAppend("You accuse " + GeneralPublic[ActorID].Name + " of murder!");
+        }
+        else
+        {
+            TextboxAppend("You abstain from making any statements.");
+        }
+        PhaseDelay = ShortDelay;
+        GamePhase = 2;
+        return;
+    }
+
     void ActorStatement(int ActorID)
     { //
         int decision = GeneralPublic[ActorID].Accuse();
-        if (decision != -1){
+        if (decision != -1)
+        {
             if (decision != -2)
             {
-                TextboxAppend(GeneralPublic[ActorID].Name + " accuses "  + GeneralPublic[decision].Name + " of murder!");
+                TextboxAppend(GeneralPublic[ActorID].Name + " accuses " + GeneralPublic[decision].Name + " of murder!");
                 for (int i = 1; i < GeneralPublic.Length; i++)
                 {
-                    GeneralPublic[i].AddAmnity(decision,1);
+                    GeneralPublic[i].AddAmnity(decision, 1);
                 }
                 PhaseDelay = ShortDelay;
             }
@@ -188,6 +214,21 @@ public class CoreGameScript : MonoBehaviour
         {
             PhaseDelay = MicroDelay;
         }
+    }
+
+    void PlayerVote(int ActorID)
+    {
+        if (ActorID != 0)
+        {
+            TextboxAppend("You vote for " + GeneralPublic[ActorID].Name + ".");
+        }
+        else
+        {
+            TextboxAppend("You abstain from voting.");
+        }
+        PhaseDelay = ShortDelay;
+        GamePhase = 3;
+        return;
     }
 
     void ActorVote(int ActorID)
@@ -209,7 +250,7 @@ public class CoreGameScript : MonoBehaviour
         Hat = new int[GeneralPublic.Length];
         for (int i = 1; i < GeneralPublic.Length; i++)
         {
-            
+
             Hat[i] = i;
         }
     }
@@ -225,12 +266,12 @@ public class CoreGameScript : MonoBehaviour
 
     void TalleyVote()
     {
-        if (VoteTalley.Max() >=  (CurrentlyAlive() / 2))
+        if (VoteTalley.Max() >= (CurrentlyAlive() / 2))
         {
             Execution(Array.IndexOf(VoteTalley, VoteTalley.Max()));
         }
     }
-    
+
     void Execution(int executee)
     {
         TextboxAppend(GeneralPublic[executee].Name + " has been found guilty. They are swiftly executed...");
@@ -249,12 +290,12 @@ public class CoreGameScript : MonoBehaviour
             case 1: //mid-announcement
                 //TextboxAppend("Announcement");
                 PhaseDelay = MicroDelay;
-                GamePhase = 11; 
+                GamePhase = 11;
                 break;
             case 11: //post-statement
                 //TextboxAppend("debug: post-statement");
                 PhaseDelay = MicroDelay;
-                GamePhase = 19; 
+                GamePhase = 19;
                 break;
             case 19:
                 setupHat();
@@ -268,14 +309,16 @@ public class CoreGameScript : MonoBehaviour
                 if (Hat.Length != 0)
                 {
                     rng = UnityEngine.Random.Range(1, Hat.Length) - 1;
-                    if (Hat[rng] == 0){
+                    if (Hat[rng] == 0)
+                    {
                         Hat = Hat.Where(w => w != Hat[rng]).ToArray();
                         PhaseDelay = MicroDelay;
-                        GamePhase = 200; 
-                        break;}
+                        GamePhase = 200;
+                        break;
+                    }
                     else if (GeneralPublic[rng].Alive)
                     {
-                        
+
                         //TextboxAppend("RNG is: " + rng + ", Hat size is " + Hat.Length);
                         ActorStatement(Hat[rng]);
                         Hat = Hat.Where(w => w != Hat[rng]).ToArray();
@@ -306,7 +349,7 @@ public class CoreGameScript : MonoBehaviour
             case 21: //post-statement
                      //TextboxAppend("debug: post-statement");
                 PhaseDelay = MicroDelay;
-                GamePhase = 29; 
+                GamePhase = 29;
                 break;
             case 29:
                 setupHat();
@@ -320,11 +363,13 @@ public class CoreGameScript : MonoBehaviour
                 if (Hat.Length != 0)
                 {
                     rng = UnityEngine.Random.Range(1, Hat.Length) - 1;
-                    if (Hat[rng] == 0) {
+                    if (Hat[rng] == 0)
+                    {
                         Hat = Hat.Where(w => w != Hat[rng]).ToArray();
                         GamePhase = 300;
                         PhaseDelay = ShortDelay;
-                        break; }
+                        break;
+                    }
                     //if (GeneralPublic[i].ali
                     if (GeneralPublic[rng].Alive) ActorVote(Hat[rng]);
                     Hat = Hat.Where(w => w != Hat[rng]).ToArray();
@@ -334,7 +379,7 @@ public class CoreGameScript : MonoBehaviour
                     GamePhase = 31;
                 }
                 PhaseDelay = ShortDelay;
-                
+
                 break;
             case 300: //player's turn to vote
                 if (debug)
@@ -344,12 +389,12 @@ public class CoreGameScript : MonoBehaviour
                     break;
                 }
                 TextboxAppend("The time has come for you to vote./n(Click on the villager you would like to accuse, or yourself to accuse nobody)");
-                
+
                 break;
             case 31: //post-vote
                 TalleyVote();
                 PhaseDelay = ShortDelay;
-                GamePhase = 4; 
+                GamePhase = 4;
                 break;
             case 4: //Intermission ending
                 //TextboxAppend("debug: Intermission");
@@ -360,13 +405,13 @@ public class CoreGameScript : MonoBehaviour
                     GeneralPublic[i].Paranoia();
                 }
                 PhaseDelay = LongDelay;
-                GamePhase = 41; 
+                GamePhase = 41;
                 break;
             case 41: //post-intermission
                 //TextboxAppend("debug: post-intermission");
                 NighttoDay();
                 PhaseDelay = MicroDelay;
-                GamePhase = 1; 
+                GamePhase = 1;
                 break;
             case 400: //player's turn to night action
                 break;
@@ -386,11 +431,19 @@ public class CoreGameScript : MonoBehaviour
                 //GamePhase = 15;
                 //TextboxAppend("debug: Dropping into the first statement");
                 GamePhase = 103;
-               PhaseDelay = LongDelay;
+                PhaseDelay = LongDelay;
                 break;
             case 103:
-                TextboxAppend("Soon the sun sets, and darkness blankets the town");
-                 GamePhase = 4;
+                //TextboxAppend("Soon the sun sets, and darkness blankets the town");
+                //TextboxAppend("Test1:" +  GeneralPublic.Length);
+               // TextboxAppend("Test2:" + CountOfHeads.Length);
+                //TextboxAppend("Test3:" + (GeneralPublic[0].Avatar != null)); 
+                //TextboxAppend("Test4:" + GeneralPublic[1].ID);
+                //TextboxAppend("Test5:" + (GeneralPublic[1].Avatar != null));
+                //TextboxAppend("Test66:" + GeneralPublic[5].ID);
+                //TextboxAppend("Test7:" + (GeneralPublic[5].Avatar != null));
+                //TextboxAppend("Test8:" + testint);
+                GamePhase = 4;
                 PhaseDelay = ShortDelay;
                 break;
         }
@@ -455,7 +508,7 @@ class Actor
         this.Amnity = new int[totalActors];
         this.Suspicion = new int[totalActors];
         this.Alive = true;
-        this.Icon = StartingIcon;
+        Icon = StartingIcon;
         SetAmnity(totalActors);
     }
     public void SetAmnity(int totalActors)
@@ -505,21 +558,22 @@ class Actor
     }
     public void Death()
     {
-        this.Alive = false;
-        this.Avatar.GetComponent<ActorScript>().EnableAnkh();
+        Alive = false;
+        Avatar.GetComponent<ActorScript>().SetAnkh(true);
     }
     public void SetIcon(Sprite InIcon)
     {
-        this.Icon = InIcon;
-        this.Avatar.GetComponent<ActorScript>().SwapSprite(this.Icon);
+        Icon = InIcon;
+        Avatar.GetComponent<ActorScript>().SetIcon(Icon);
     }
-    public void SetupAvatar()
+    public void SetupAvatar(Sprite InIcon)
     {
-        this.Avatar.GetComponent<ActorScript>().SetActorId(this.ID);
-        this.Avatar.GetComponent<ActorScript>().SwapSprite(this.Icon);
-        if (!this.Alive)
+        Avatar.GetComponent<ActorScript>().SetActorId(ID);
+        Avatar.GetComponent<ActorScript>().SetIcon(Icon);
+        if (!Alive)
         {
-            this.Avatar.GetComponent<ActorScript>().EnableAnkh();
+            Avatar.GetComponent<ActorScript>().SetAnkh(true);
         }
+        return;
     }
 }

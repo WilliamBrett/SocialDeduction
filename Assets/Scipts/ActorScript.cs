@@ -7,34 +7,21 @@ public class ActorScript : MonoBehaviour
 {
     private CoreGameScript CoreScript;
     private Image ActorImage;
-    public int ActorId; //hardcoded, set dynamic?
+    public int ActorId;
     public GameObject ankh;
 
     public void Start()
     {
-        //ActorImage = this.GetComponent<Image>();
+        //Due to how actors are treated, Start() cannot be used conventionally for some neccesary configurations
         CoreScript = GameObject.FindGameObjectWithTag("EventSystem").GetComponent<CoreGameScript>();
-
+        //ActorImage = GetComponent<Image>();
     }
 
-    public void SetActorId(int ID)
-    {
-        this.ActorId = ID;
-    }
+    public void SetActorId(int ID) => ActorId = ID;
 
-    public void SwapSprite(Sprite swapIn)
-    {
-        ActorImage.sprite = swapIn;
-    }
+    public void SetIcon(Sprite swapIn) => GetComponent<Image>().sprite = swapIn;
 
-    public void ButtonClicked()
-    {
-        //CoreScript.ButtonClicked(int.Parse(name) - 1);
-        CoreScript.ButtonClicked(ActorId);
-    }
+    public void ButtonClicked() => CoreScript.ButtonClicked(ActorId);
 
-    public void EnableAnkh()
-    {
-        ankh.SetActive(true);
-    }
+    public void SetAnkh(bool isActive) => ankh.SetActive(isActive);
 }
