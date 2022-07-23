@@ -160,6 +160,16 @@ public class CoreGameScript : MonoBehaviour
         }
     }
 
+    void SetupRoles()
+    {
+        SetupHat();
+        rng = UnityEngine.Random.Range(1, Hat.Length) - 1;
+        GeneralPublic[rng].Role = "Killer";
+        GeneralPublic[rng].TrueIcon = KnifeIcon;
+        Hat = Hat.Where(w => w != Hat[rng]).ToArray();
+        return;
+    }
+
     int Talleyvotes(int PlayerVote)
     {
         int accused = 0;
@@ -245,7 +255,7 @@ public class CoreGameScript : MonoBehaviour
         }
     }
 
-    void setupHat()
+    void SetupHat()
     {
         Hat = new int[GeneralPublic.Length];
         for (int i = 1; i < GeneralPublic.Length; i++)
@@ -283,6 +293,19 @@ public class CoreGameScript : MonoBehaviour
 
     }
 
+    void ActorNight(int ActorId)
+    {
+        switch (GeneralPublic[ActorId].Role){
+            case "killer":
+                break;
+        }
+    }
+
+    void Murder()
+    {
+
+    }
+
     public void ProgressPhase()
     {
         switch (GamePhase)
@@ -298,7 +321,7 @@ public class CoreGameScript : MonoBehaviour
                 GamePhase = 19;
                 break;
             case 19:
-                setupHat();
+                SetupHat();
                 TextboxAppend("The time has come for announcements, there is a pause to see if anyone steps forward...");
                 GamePhase = 2;
                 PhaseDelay = MicroDelay;
@@ -352,7 +375,7 @@ public class CoreGameScript : MonoBehaviour
                 GamePhase = 29;
                 break;
             case 29:
-                setupHat();
+                SetupHat();
                 setupVoteTalley();
                 GamePhase = 3;
                 PhaseDelay = ShortDelay;
@@ -393,19 +416,42 @@ public class CoreGameScript : MonoBehaviour
                 break;
             case 31: //post-vote
                 TalleyVote();
+                GamePhase = 39;
+                PhaseDelay = ShortDelay;
+                break;
+            case 39: //pre-intermission
+                SetupHat();
+                DayToNight();
                 PhaseDelay = ShortDelay;
                 GamePhase = 4;
                 break;
-            case 4: //Intermission ending
-                //TextboxAppend("debug: Intermission");
-                DayToNight();
-                TextboxAppend("The night is peaceful enough, though in the silence the paranoia of the villagers only grows...");
-                for (int i = 1; i < GeneralPublic.Length; i++)
+            case 4: //Intermission
+                    
+                if (Hat.Length != 0) //if any numbers are in the hat
                 {
-                    GeneralPublic[i].Paranoia();
+                    rng = UnityEngine.Random.Range(1, Hat.Length) - 1; //random number in the hat
+                    if (Hat[rng] == 0) //if number is player
+                    {
+                        GamePhase = 400; //playerphase
+                        Hat = Hat.Where(w => w != Hat[rng]).ToArray(); //remove player's number from the hat
+                        PhaseDelay = MicroDelay;
+                        break;
+                    }
+                    else
+                    {
+                        if (GeneralPublic[rng].Alive) ActorNight(Hat[rng]); //if actor is alive, do the night thing
+                        GeneralPublic[rng].Paranoia(); //paranoia
+                        //if GeneralPublic[rng]
+                         //remove number from the hat
+                    }
                 }
-                PhaseDelay = LongDelay;
-                GamePhase = 41;
+                else
+                { //if no numbers are in the hat
+                    GamePhase = 41; //end night phase
+                    PhaseDelay = LongDelay;
+                    break;
+                }
+                GamePhase = MicroDelay;
                 break;
             case 41: //post-intermission
                 //TextboxAppend("debug: post-intermission");
@@ -414,6 +460,9 @@ public class CoreGameScript : MonoBehaviour
                 GamePhase = 1;
                 break;
             case 400: //player's turn to night action
+                TextboxAppend("The night is peaceful enough, though in the silence the paranoia of the villagers only grows...");
+                GamePhase = 4;
+                PhaseDelay = MicroDelay;
                 break;
             case 100:
                 TextboxAppend("You have arrived in a town along you journey, with " + (GeneralPublic.Length - 1).ToString() + " inhabitants.");
@@ -464,30 +513,7 @@ public class CoreGameScript : MonoBehaviour
 
         }
     }
-    public void Announcement()
-    {
 
-    }
-    public void StartStatement()
-    {
-
-    }
-    public void EndStatement()
-    {
-
-    }
-    public void StartVote()
-    {
-
-    }
-    public void EndVote()
-    {
-
-    }
-    public void Intermission()
-    {
-
-    }
 }
 
 class Actor
@@ -501,6 +527,7 @@ class Actor
     public int Suspect; //This is used by special roles, where an actor identified a suspect
     public bool Alive;
     public Sprite Icon;
+    public Sprite TrueIcon;
     //private Random random;
     public Actor(int ActorNum, int totalActors, Sprite StartingIcon)
     {
@@ -559,6 +586,7 @@ class Actor
     public void Death()
     {
         Alive = false;
+        Icon = TrueIcon;
         Avatar.GetComponent<ActorScript>().SetAnkh(true);
     }
     public void SetIcon(Sprite InIcon)
