@@ -11,29 +11,28 @@ public class CoreGameScript : MonoBehaviour
 
     //General delcarations
     public static CoreGameScript current;
-    //public GameObject[] AddressBook;
-    public GameObject[] CountOfHeads;
-    private Actor[] GeneralPublic;
-    //public ActorProperties[] 
-    private GameObject Textbox;
-    public int GamePhase;
+    public GameObject[] CountOfHeads; //used to count "Avatar" items to be assigned to Actors
+    private Actor[] GeneralPublic; //The general container for "Actor" objects
+    private GameObject Textbox; //The object that text is written to
+    public int GamePhase; //Controls the current state of the game
     private Image anImage; //used to specify images for alteration
     private int PhaseDelay; //PD-- on Update(), on 0 trigers change of phase
-    private int MicroDelay = 1;
+    private int MicroDelay = 1; //The length of a "micro" timed delay
     private int ShortDelay = 25;//250 //This setting controls the length of a "short" timed delay
     private int StandardDelay = 50;//500 //This setting controls the length of a "normal" tomed delay
     private int LongDelay = 75;//750
+    //Random names are pulled from NameRegistry to assign to Actors
     private readonly string[] NameRegistry = { "Ace", "Barbara", "Boris", "Caleb", "David", "Elizabeth", "James", "Jennifer", "Jessica", "John", "Joseph", "Linda", "Mary", "Michael", "Patricia", "Patrick", "Richard", "Robert", "Sarah", "Susan", "Thomas", "William" };
     private int[] Hat; //This is used to talley votes
     private int[] SocialIndex; //used to record the "social" role members
     private int[] InvestigativeIndex; //used to record the "investigative" role members"
     private int[] ProtectiveIndex; //used to record the "protective" role members
     private int[] KillerIndex; //used to record the "killer" role members"
-    private int HatSize;
-    private int[] VoteTalley;
-    public int ActorQuantity = 12;
+    private int HatSize; 
+    private int[] VoteTalley; //used to talley votes
+    public int ActorQuantity = 12; //this is meant to eventually be adjustable to control the number of "Actors"
     private int rng; //used for random decisions
-    private string AnnouncementBuffer;
+    private string AnnouncementBuffer; //A buffer used for time delayed announcements
 
     //day & night declerations
     public GameObject DaySky;
@@ -57,31 +56,19 @@ public class CoreGameScript : MonoBehaviour
     {
         current = this;
         DontDestroyOnLoad(gameObject);
-        initialize();
+        initialize(); //sets up the game, but can be recalled if a game needs to be restarted. 
     }
 
     // Start is called before the first frame update
     private void Start()
     {
-        Console.WriteLine("Debug: Start");
-        //GeneralPublic = GameObject.FindGameObjectsWithTag("Actor");
-        CountOfHeads = GameObject.FindGameObjectsWithTag("Actor");
-        Textbox = GameObject.FindGameObjectWithTag("Textbox");
-        //startTest();
-        testint = 0;
+        CountOfHeads = GameObject.FindGameObjectsWithTag("Actor"); //CountOfHeads is setup
+        Textbox = GameObject.FindGameObjectWithTag("Textbox"); //Textbox is setup
         for (int i = 0; i < ActorQuantity; i++)
         {
-            GeneralPublic[i].Avatar = CountOfHeads[i];
-            GeneralPublic[i].SetupAvatar(PersonIcon);
-            //Console.WriteLine("Actor " + i + " setup.");
+            GeneralPublic[i].Avatar = CountOfHeads[i]; //Avatars are assigned from CountOfHeads
+            GeneralPublic[i].SetupAvatar(PersonIcon); //Initial avatar is setup
         }
-        for (int i = 0; i < ActorQuantity; i++)
-        {
-            
-            //Console.WriteLine("Actor " + i + " setup.");
-            testint++;
-        }
-        //gameBoardSetup();
     }
 
     void initialize()
@@ -102,15 +89,7 @@ public class CoreGameScript : MonoBehaviour
             UnusedNames = UnusedNames.Where(w => w != UnusedNames[rng]).ToArray();
         }
         SetupRoles();
-        //ActorsRemaining = ActorQuantity;
     }
-
-    /*void gameBoardSetup()
-    {
-        
-        //Used on start() to "load" the current in-progress game
-
-    }*/
 
     // Update is called once per frame
     void Update()
@@ -182,15 +161,6 @@ public class CoreGameScript : MonoBehaviour
         InvestigativeIndex = InvestigativeIndex.Where(w => w != 0).ToArray(); //sanatize InvestigativeIndex
         ProtectiveIndex = ProtectiveIndex.Where(w => w != 0).ToArray(); //sanatize ProtectiveIndex
         KillerIndex = KillerIndex.Where(w => w != 0).ToArray(); //sanatize KillerIndex
-        //add in player to an index after this point
-        /*for (int i = GeneralPublic.Length; i > 0; i--)
-        {
-            if (SocialIndex[i] == 0) SocialIndex = SocialIndex.Where(w => w != SocialIndex[i]).ToArray();
-            if (InvestigativeIndex[i] == 0) InvestigativeIndex[i] = -1;
-            if (ProtectiveIndex[i] == 0) ProtectiveIndex[i] = -1;
-            if (KillerIndex[i] == 0) KillerIndex[i] = -1;
-        }*/
-
         return;
     }
 
@@ -201,6 +171,7 @@ public class CoreGameScript : MonoBehaviour
     }
 
     int CurrentlyAlive()
+    //This is used to determine how many players are currently alive, for purposes such as determining game state
     {
         int j = 0;
         for (int i = 0; i < GeneralPublic.Length; i++)
