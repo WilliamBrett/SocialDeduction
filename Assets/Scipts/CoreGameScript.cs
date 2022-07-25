@@ -25,10 +25,15 @@ public class CoreGameScript : MonoBehaviour
     private int LongDelay = 75;//750
     private readonly string[] NameRegistry = { "Ace", "Barbara", "Boris", "Caleb", "David", "Elizabeth", "James", "Jennifer", "Jessica", "John", "Joseph", "Linda", "Mary", "Michael", "Patricia", "Patrick", "Richard", "Robert", "Sarah", "Susan", "Thomas", "William" };
     private int[] Hat; //This is used to talley votes
+    private int[] SocialIndex; //used to record the "social" role members
+    private int[] InvestigativeIndex; //used to record the "investigative" role members"
+    private int[] ProtectiveIndex; //used to record the "protective" role members
+    private int[] KillerIndex; //used to record the "killer" role members"
     private int HatSize;
     private int[] VoteTalley;
     public int ActorQuantity = 12;
     private int rng; //used for random decisions
+    private string AnnouncementBuffer;
 
     //day & night declerations
     public GameObject DaySky;
@@ -96,6 +101,7 @@ public class CoreGameScript : MonoBehaviour
             GeneralPublic[i].Name = UnusedNames[rng];
             UnusedNames = UnusedNames.Where(w => w != UnusedNames[rng]).ToArray();
         }
+        SetupRoles();
         //ActorsRemaining = ActorQuantity;
     }
 
@@ -163,10 +169,28 @@ public class CoreGameScript : MonoBehaviour
     void SetupRoles()
     {
         SetupHat();
-        rng = UnityEngine.Random.Range(1, Hat.Length) - 1;
-        GeneralPublic[rng].Role = "Killer";
+        SocialIndex = new int[GeneralPublic.Length];
+        InvestigativeIndex = new int[GeneralPublic.Length];
+        ProtectiveIndex = new int[GeneralPublic.Length];
+        KillerIndex  = new int[GeneralPublic.Length];
+        rng = UnityEngine.Random.Range(2, Hat.Length) - 1; //anyone other than the player
+        GeneralPublic[rng].Role = "Murderer";
         GeneralPublic[rng].TrueIcon = KnifeIcon;
+        KillerIndex[0] = rng; //the number is added to the killerhat
         Hat = Hat.Where(w => w != Hat[rng]).ToArray();
+        SocialIndex = SocialIndex.Where(w => w != 0).ToArray(); //sanatize SocialIndex
+        InvestigativeIndex = InvestigativeIndex.Where(w => w != 0).ToArray(); //sanatize InvestigativeIndex
+        ProtectiveIndex = ProtectiveIndex.Where(w => w != 0).ToArray(); //sanatize ProtectiveIndex
+        KillerIndex = KillerIndex.Where(w => w != 0).ToArray(); //sanatize KillerIndex
+        //add in player to an index after this point
+        /*for (int i = GeneralPublic.Length; i > 0; i--)
+        {
+            if (SocialIndex[i] == 0) SocialIndex = SocialIndex.Where(w => w != SocialIndex[i]).ToArray();
+            if (InvestigativeIndex[i] == 0) InvestigativeIndex[i] = -1;
+            if (ProtectiveIndex[i] == 0) ProtectiveIndex[i] = -1;
+            if (KillerIndex[i] == 0) KillerIndex[i] = -1;
+        }*/
+
         return;
     }
 
@@ -285,25 +309,44 @@ public class CoreGameScript : MonoBehaviour
     void Execution(int executee)
     {
         TextboxAppend(GeneralPublic[executee].Name + " has been found guilty. They are swiftly executed...");
-        GeneralPublic[executee].Death();
+        Death(executee);
+    }
+
+    void Death(int deadee)
+    {
+        GeneralPublic[deadee].Death();
         for (int i = 1; i < GeneralPublic.Length; i++)
         {
-            GeneralPublic[i].DropSuspicion(executee);
+            GeneralPublic[i].DropSuspicion(deadee);
         }
-
+        SocialIndex = SocialIndex.Where(w => w != deadee).ToArray();
+        InvestigativeIndex = InvestigativeIndex.Where(w => w != deadee).ToArray();
+        ProtectiveIndex = ProtectiveIndex.Where(w => w != deadee).ToArray();
+        KillerIndex = KillerIndex.Where(w => w != deadee).ToArray();
+        if (deadee == 0)
+        {
+            TextboxAppend("You are dead. Whatever the conclusion to this tale, you will not see it...");
+            TextboxAppend("You loose.");
+            GamePhase = 1000;
+        }
     }
 
-    void ActorNight(int ActorId)
+
+    void Murder(int MurdererId)
     {
-        switch (GeneralPublic[ActorId].Role){
-            case "killer":
-                break;
+        int decision = GeneralPublic[MurdererId].Accuse();
+        while (decision == -1 || decision == MurdererId)
+        {
+            //if murderer doesn't hate anyone, they pick a random target ... other than themself. 
+            decision = UnityEngine.Random.Range(2, GeneralPublic.Length) - 1; 
         }
-    }
-
-    void Murder()
-    {
-
+        TextboxAppend("Murderer is " + MurdererId + ", murderee is " + decision);
+        Death(decision);
+        for (int i = 1; i < GeneralPublic.Length; i++)
+        {
+            GeneralPublic[i].Paranoia();
+        }
+        AnnouncementBuffer += (GeneralPublic[decision].Name + " was murdered during the night!"); //stores the death announcement for night's end. 
     }
 
     public void ProgressPhase()
@@ -426,7 +469,7 @@ public class CoreGameScript : MonoBehaviour
                 GamePhase = 4;
                 break;
             case 4: //Intermission
-                    
+                /*    
                 if (Hat.Length != 0) //if any numbers are in the hat
                 {
                     rng = UnityEngine.Random.Range(1, Hat.Length) - 1; //random number in the hat
@@ -452,17 +495,143 @@ public class CoreGameScript : MonoBehaviour
                     break;
                 }
                 GamePhase = MicroDelay;
+                */
+                GamePhase = 405;
+                PhaseDelay = MicroDelay;
                 break;
-            case 41: //post-intermission
+            case 405://setup social sub-phase
+                Hat = SocialIndex;
+                PhaseDelay = MicroDelay;
+                GamePhase = 41;
+                break;
+            case 41: //social sub-phase
+                if (Hat.Length != 0)
+                {
+                    rng = UnityEngine.Random.Range(1, Hat.Length) - 1;
+                    if (Hat[rng] == 0) //if number is player
+                    {
+
+                        TextboxAppend("Social test: " + Hat.Length);
+                        GamePhase = 400; //playerphase
+                        Hat = Hat.Where(w => w != Hat[rng]).ToArray(); //remove player's number from the hat
+                        PhaseDelay = MicroDelay;
+                        break;
+                    }
+                }
+                else
+                { //if no numbers are in the hat
+                    GamePhase = 415; //end phase
+                    PhaseDelay = MicroDelay;
+                    break;
+                }
+                PhaseDelay = MicroDelay;
+                break;
+            case 415://setup investivative sub-phase
+                Hat = InvestigativeIndex;
+                PhaseDelay = MicroDelay;
+                GamePhase = 42;
+                break;
+            case 42: //investigative sub-phase
+                if (Hat.Length != 0)
+                {
+                    rng = UnityEngine.Random.Range(1, Hat.Length) - 1;
+                    if (Hat[rng] == 0) //if number is player
+                    {
+                        TextboxAppend("Investigative test: " + Hat[rng]); 
+                        GamePhase = 400; //playerphase
+                        Hat = Hat.Where(w => w != Hat[rng]).ToArray(); //remove player's number from the hat
+                        PhaseDelay = MicroDelay;
+                        break;
+                    }
+                }
+                else
+                { //if no numbers are in the hat
+                    GamePhase = 425; //end phase
+                    PhaseDelay = MicroDelay;
+                    break;
+                }
+                PhaseDelay = MicroDelay;
+                break;
+            case 425://setup protective sub-phase
+                Hat = ProtectiveIndex;
+                PhaseDelay = MicroDelay;
+                GamePhase = 43;
+                break;
+            case 43: //protective sub-phase
+                if (Hat.Length != 0)
+                {
+                    TextboxAppend("Protective test: " + Hat[rng]);
+                    rng = UnityEngine.Random.Range(1, Hat.Length) - 1;
+                    if (Hat[rng] == 0) //if number is player
+                    {
+                        GamePhase = 400; //playerphase
+                        Hat = Hat.Where(w => w != Hat[rng]).ToArray(); //remove player's number from the hat
+                        PhaseDelay = MicroDelay;
+                        break;
+                    }
+                }
+                else
+                { //if no numbers are in the hat
+                    GamePhase = 435; //end phase
+                    PhaseDelay = MicroDelay;
+                    break;
+                }
+                PhaseDelay = MicroDelay;
+                break;
+            case 435://setup killer sub-phase
+                Hat = KillerIndex;
+                PhaseDelay = MicroDelay;
+
+                GamePhase = 44;
+                break;
+            case 44: //killer sub-phase
+                TextboxAppend("Hate length is " + Hat.Length);
+                if (Hat.Length != 0)
+                {
+                    rng = UnityEngine.Random.Range(1, Hat.Length) - 1;
+                    switch (GeneralPublic[Hat[rng]].Role)
+                    {
+                        case "Murderer":
+                            
+                            
+                            Murder(Hat[rng]);
+                            PhaseDelay = MicroDelay;
+                            Hat = Hat.Where(w => w != Hat[rng]).ToArray();
+                            break;
+
+                    }
+                }
+                else
+                { //if no numbers are in the hat
+                    GamePhase = 49; //end phase
+                    PhaseDelay = MicroDelay;
+                    break;
+                }
+                PhaseDelay = MicroDelay;
+                break;
+            case 45: //Intermission Ends
                 //TextboxAppend("debug: post-intermission");
                 NighttoDay();
                 PhaseDelay = MicroDelay;
                 GamePhase = 1;
                 break;
-            case 400: //player's turn to night action
-                TextboxAppend("The night is peaceful enough, though in the silence the paranoia of the villagers only grows...");
-                GamePhase = 4;
+            case 49: //post-intermission
+                TextboxAppend(AnnouncementBuffer);
+                NighttoDay();
                 PhaseDelay = MicroDelay;
+                GamePhase = 1;
+                break;
+            case 400: //player's turn to night action
+                switch (GeneralPublic[0].Role)
+                {
+                    case "Citizen":
+                        TextboxAppend("The night is peaceful enough, though in the silence the paranoia of the villagers only grows...");
+                        GamePhase = 4;
+                        PhaseDelay = MicroDelay;
+                        break;
+                }
+                    
+                
                 break;
             case 100:
                 TextboxAppend("You have arrived in a town along you journey, with " + (GeneralPublic.Length - 1).ToString() + " inhabitants.");
@@ -485,7 +654,7 @@ public class CoreGameScript : MonoBehaviour
             case 103:
                 //TextboxAppend("Soon the sun sets, and darkness blankets the town");
                 //TextboxAppend("Test1:" +  GeneralPublic.Length);
-               // TextboxAppend("Test2:" + CountOfHeads.Length);
+                // TextboxAppend("Test2:" + CountOfHeads.Length);
                 //TextboxAppend("Test3:" + (GeneralPublic[0].Avatar != null)); 
                 //TextboxAppend("Test4:" + GeneralPublic[1].ID);
                 //TextboxAppend("Test5:" + (GeneralPublic[1].Avatar != null));
@@ -531,10 +700,11 @@ class Actor
     //private Random random;
     public Actor(int ActorNum, int totalActors, Sprite StartingIcon)
     {
-        this.ID = ActorNum;
-        this.Amnity = new int[totalActors];
-        this.Suspicion = new int[totalActors];
-        this.Alive = true;
+        ID = ActorNum;
+        Amnity = new int[totalActors];
+        Suspicion = new int[totalActors];
+        Alive = true;
+        Role = "Citizen";
         Icon = StartingIcon;
         SetAmnity(totalActors);
     }
