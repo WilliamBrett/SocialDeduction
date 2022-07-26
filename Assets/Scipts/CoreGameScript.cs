@@ -157,6 +157,12 @@ public class CoreGameScript : MonoBehaviour
         GeneralPublic[rng].TrueIcon = KnifeIcon;
         KillerIndex[0] = rng; //the number is added to the killerhat
         Hat = Hat.Where(w => w != Hat[rng]).ToArray();
+        rng = UnityEngine.Random.Range(2, Hat.Length) - 1; //anyone other than the player
+        GeneralPublic[rng].Role = "Seer";
+        GeneralPublic[rng].TrueIcon = KnifeIcon;//PLACEHOLDER
+        InvestigativeIndex[0] = rng; //the number is added to the killerhat
+        Hat = Hat.Where(w => w != Hat[rng]).ToArray();
+
         SocialIndex = SocialIndex.Where(w => w != 0).ToArray(); //sanatize SocialIndex
         InvestigativeIndex = InvestigativeIndex.Where(w => w != 0).ToArray(); //sanatize InvestigativeIndex
         ProtectiveIndex = ProtectiveIndex.Where(w => w != 0).ToArray(); //sanatize ProtectiveIndex
@@ -508,11 +514,38 @@ public class CoreGameScript : MonoBehaviour
                     rng = UnityEngine.Random.Range(1, Hat.Length) - 1;
                     if (Hat[rng] == 0) //if number is player
                     {
-                        TextboxAppend("Investigative test: " + Hat[rng]); 
+                        TextboxAppend("Investigative test: " + Hat[rng]);
                         GamePhase = 400; //playerphase
                         Hat = Hat.Where(w => w != Hat[rng]).ToArray(); //remove player's number from the hat
                         PhaseDelay = MicroDelay;
                         break;
+                    }
+                    else
+                    {
+                        rng = UnityEngine.Random.Range(1, Hat.Length) - 1;
+                        switch (GeneralPublic[Hat[rng]].Role)
+                        {
+                            case "Seer":
+                                for (int i = 1; i < 4; i++)
+                                {
+                                    int decision = GeneralPublic[UnityEngine.Random.Range(1, GeneralPublic.Length) - 1].ID;
+                                    if (decision == Hat[rng])
+                                    {
+                                        i--;
+                                    }
+                                    else
+                                    {
+                                        if (GeneralPublic[decision].Role == "Murderer"){
+                                            GeneralPublic[Hat[rng]].Suspect = decision;
+                                        }
+                                        else
+                                        {
+                                            GeneralPublic[Hat[rng]].DropSuspicion(decision);
+                                        }
+                                    }
+                                }
+                                break;
+                        }
                     }
                 }
                 else
