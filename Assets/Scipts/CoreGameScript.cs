@@ -13,6 +13,7 @@ public class CoreGameScript : MonoBehaviour
     public static CoreGameScript current;
     public GameObject[] CountOfHeads; //used to count "Avatar" items to be assigned to Actors
     private Actor[] GeneralPublic; //The general container for "Actor" objects
+    private int[] Alive; //A list of "Actor"s that are currently "alive"
     private GameObject Textbox; //The object that text is written to
     public int GamePhase; //Controls the current state of the game
     private Image anImage; //used to specify images for alteration
@@ -77,9 +78,11 @@ public class CoreGameScript : MonoBehaviour
         GamePhase = 100;
         PhaseDelay = ShortDelay;
         GeneralPublic = new Actor[ActorQuantity];
+        Alive = new int[ActorQuantity];
         for (int i = 0; i < ActorQuantity; i++)
         {
             GeneralPublic[i] = new Actor(i, ActorQuantity, PersonIcon);
+            Alive[i] = i;
         }
         string[] UnusedNames = NameRegistry;
         for (int i = 1; i < ActorQuantity; i++)
@@ -155,6 +158,7 @@ public class CoreGameScript : MonoBehaviour
         rng = UnityEngine.Random.Range(2, Hat.Length) - 1; //anyone other than the player
         GeneralPublic[rng].Role = "Murderer";
         GeneralPublic[rng].TrueIcon = KnifeIcon;
+        GeneralPublic[rng].isEvil = true;
         KillerIndex[0] = rng; //the number is added to the killerhat
         Hat = Hat.Where(w => w != Hat[rng]).ToArray();
         rng = UnityEngine.Random.Range(2, Hat.Length) - 1; //anyone other than the player
@@ -176,7 +180,7 @@ public class CoreGameScript : MonoBehaviour
         return accused;
     }
 
-    int CurrentlyAlive()
+    /*int CurrentlyAlive() //This is antiquated
     //This is used to determine how many players are currently alive, for purposes such as determining game state
     {
         int j = 0;
@@ -185,7 +189,7 @@ public class CoreGameScript : MonoBehaviour
             if (GeneralPublic[i].Alive) j++;
         }
         return j;
-    }
+    }*/
 
     void PlayerStatement(int ActorID)
     {
@@ -203,27 +207,88 @@ public class CoreGameScript : MonoBehaviour
     }
 
     void ActorStatement(int ActorID)
-    { //
+    { 
         int decision = GeneralPublic[ActorID].Accuse();
-        if (decision != -1)
+        switch (decision)
         {
-            if (decision != -2)
-            {
-                TextboxAppend(GeneralPublic[ActorID].Name + " accuses " + GeneralPublic[decision].Name + " of murder!");
-                for (int i = 1; i < GeneralPublic.Length; i++)
-                {
-                    GeneralPublic[i].AddAmnity(decision, 1);
-                }
-                PhaseDelay = ShortDelay;
-            }
-            else
-            {
+            case -1: //The actor isn't suspicious enough of anyone to accuse them
                 PhaseDelay = MicroDelay;
-            }
-        }
-        else
-        {
-            PhaseDelay = MicroDelay;
+                break;
+            case -2: //The actor is dead
+                PhaseDelay = MicroDelay;
+                break;
+            default:
+                double suspicionLevel = GeneralPublic[ActorID].Suspicion[decision] / 5;
+                int decision2 = Convert.ToInt32((int) Math.Floor(suspicionLevel));
+                if (decision2 > 2) decision2 = 2;
+                switch (decision2)
+                {
+                    case -1: //The actor knows the target is not evil
+                        PhaseDelay = MicroDelay;
+                        break;
+                    case 0: //The actor is not suspicious
+                        PhaseDelay = MicroDelay;
+                        break;
+                    case 1: //The actor is mildly suspicious 
+                        PhaseDelay = ShortDelay;
+                        int randomStatement = UnityEngine.Random.Range(1, 4);
+                        switch (randomStatement)
+                        {
+                            case 1:
+                                TextboxAppend(GeneralPublic[ActorID].Name + " harrases " + GeneralPublic[decision].Name + " over a petty slight.");
+                                break;
+                            case 2:
+                                TextboxAppend(GeneralPublic[ActorID].Name + " questions " + GeneralPublic[decision].Name + "'s alibi.");
+                                break;
+                            case 3:
+                                TextboxAppend(GeneralPublic[ActorID].Name + " scolds " + GeneralPublic[decision].Name + " for some insignificant blunder.");
+                                break;
+                            case 4:
+                                TextboxAppend(GeneralPublic[ActorID].Name + " accuses " + GeneralPublic[decision].Name + " of a petty crime.");
+                                for (int i = 1; i < GeneralPublic.Length; i++)
+                                {
+                                    GeneralPublic[i].AddAmnity(decision, 1);
+                                }
+                                break;
+                        }
+                        break;
+                    case 2: //The actor is suspicious enough to declare someone of murder
+                        PhaseDelay = ShortDelay;
+                        int randomStatement2 = UnityEngine.Random.Range(1, 4);
+                        switch (randomStatement2)
+                        {
+                            case 1:
+                                TextboxAppend(GeneralPublic[ActorID].Name + " accuses " + GeneralPublic[decision].Name + " of murder!");
+                                for (int i = 1; i < GeneralPublic.Length; i++)
+                                {
+                                    GeneralPublic[i].AddAmnity(decision, 1);
+                                }
+                                break;
+                            case 2:
+                                TextboxAppend(GeneralPublic[ActorID].Name + " harshly interrogates " + GeneralPublic[decision].Name + " over their whereabouts the previous night.");
+                                for (int i = 1; i < GeneralPublic.Length; i++)
+                                {
+                                    GeneralPublic[i].AddAmnity(decision, 1);
+                                }
+                                break;
+                            case 3:
+                                TextboxAppend(GeneralPublic[ActorID].Name + " accuses " + GeneralPublic[decision].Name + " of witchcraft.");
+                                for (int i = 1; i < GeneralPublic.Length; i++)
+                                {
+                                    GeneralPublic[i].AddAmnity(decision, 1);
+                                }
+                                break;
+                            case 4:
+                                TextboxAppend(GeneralPublic[ActorID].Name + " blames " + GeneralPublic[decision].Name + " for the recent deaths.");
+                                for (int i = 1; i < GeneralPublic.Length; i++)
+                                {
+                                    GeneralPublic[i].AddAmnity(decision, 1);
+                                }
+                                break;
+                        }
+                        break;
+                }
+                break;
         }
     }
 
@@ -277,7 +342,7 @@ public class CoreGameScript : MonoBehaviour
 
     void TalleyVote()
     {
-        if (VoteTalley.Max() >= (CurrentlyAlive() / 2))
+        if (VoteTalley.Max() >= (Alive.Length / 2))
         {
             Execution(Array.IndexOf(VoteTalley, VoteTalley.Max()));
         }
@@ -296,6 +361,7 @@ public class CoreGameScript : MonoBehaviour
         {
             GeneralPublic[i].DropSuspicion(deadee);
         }
+        Alive = Alive.Where(w => w != deadee).ToArray();
         SocialIndex = SocialIndex.Where(w => w != deadee).ToArray();
         InvestigativeIndex = InvestigativeIndex.Where(w => w != deadee).ToArray();
         ProtectiveIndex = ProtectiveIndex.Where(w => w != deadee).ToArray();
@@ -701,6 +767,7 @@ class Actor
     public bool Alive;
     public Sprite Icon;
     public Sprite TrueIcon;
+    public bool isEvil; //Simpler indicator of if the actor is an "antagonist"
     //private Random random;
     public Actor(int ActorNum, int totalActors, Sprite StartingIcon)
     {
@@ -710,6 +777,7 @@ class Actor
         Alive = true;
         Role = "Citizen";
         Icon = StartingIcon;
+        isEvil = false;
         SetAmnity(totalActors);
     }
     public void SetAmnity(int totalActors)
