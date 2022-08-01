@@ -48,6 +48,8 @@ public class CoreGameScript : MonoBehaviour
     public Sprite PersonIcon;
     public Sprite CompassIcon;
     public Sprite KnifeIcon;
+    public Sprite CrystalBallIcon;
+    public Sprite MagnifyingGlassIcon;
 
     public int testint;
 
@@ -163,7 +165,12 @@ public class CoreGameScript : MonoBehaviour
         Hat = Hat.Where(w => w != Hat[rng]).ToArray();
         rng = UnityEngine.Random.Range(2, Hat.Length) - 1; //anyone other than the player
         GeneralPublic[rng].Role = "Seer";
-        GeneralPublic[rng].TrueIcon = KnifeIcon;//PLACEHOLDER
+        GeneralPublic[rng].TrueIcon = CrystalBallIcon;
+        InvestigativeIndex[0] = rng; //the number is added to the killerhat
+        Hat = Hat.Where(w => w != Hat[rng]).ToArray();
+        rng = UnityEngine.Random.Range(2, Hat.Length) - 1; //anyone other than the player
+        GeneralPublic[rng].Role = "Investigator";
+        GeneralPublic[rng].TrueIcon = MagnifyingGlassIcon;
         InvestigativeIndex[0] = rng; //the number is added to the killerhat
         Hat = Hat.Where(w => w != Hat[rng]).ToArray();
 
@@ -207,8 +214,16 @@ public class CoreGameScript : MonoBehaviour
     }
 
     void ActorStatement(int ActorID)
-    { 
-        int decision = GeneralPublic[ActorID].Accuse();
+    {
+        int decision;
+        if (Array.Exists(InvestigativeIndex, element => element == ActorID)){
+            decision = GeneralPublic[ActorID].Verify();
+        }
+        else
+        {
+            decision = GeneralPublic[ActorID].Accuse();
+        }
+        //if InvestigativeIndex.Contains(ActorID) GeneralPublic[ActorID].Verify();
         switch (decision)
         {
             case -1: //The actor isn't suspicious enough of anyone to accuse them
@@ -224,15 +239,33 @@ public class CoreGameScript : MonoBehaviour
                 switch (decision2)
                 {
                     case -1: //The actor knows the target is not evil
-                        PhaseDelay = MicroDelay;
+                        PhaseDelay = ShortDelay;
+                        int randomStatementInnocence = UnityEngine.Random.Range(1, 2);
+                        switch (randomStatementInnocence)
+                        {
+                            case 1:
+                                TextboxAppend(GeneralPublic[ActorID].Name + " vouches for " + GeneralPublic[decision].Name + ".");
+                                for (int i = 1; i < GeneralPublic.Length; i++)
+                                {
+                                    GeneralPublic[i].AddAmnity(decision, -2);
+                                }
+                                break;
+                            case 2:
+                                TextboxAppend(GeneralPublic[ActorID].Name + " assures everyone of " + GeneralPublic[decision].Name + "'s innocence.");
+                                for (int i = 1; i < GeneralPublic.Length; i++)
+                                {
+                                    GeneralPublic[i].AddAmnity(decision, -2);
+                                }
+                                break;
+                        }
                         break;
                     case 0: //The actor is not suspicious
                         PhaseDelay = MicroDelay;
                         break;
                     case 1: //The actor is mildly suspicious 
                         PhaseDelay = ShortDelay;
-                        int randomStatement = UnityEngine.Random.Range(1, 4);
-                        switch (randomStatement)
+                        int randomStatementSuspicion = UnityEngine.Random.Range(1, 4);
+                        switch (randomStatementSuspicion)
                         {
                             case 1:
                                 TextboxAppend(GeneralPublic[ActorID].Name + " harrases " + GeneralPublic[decision].Name + " over a petty slight.");
@@ -254,8 +287,8 @@ public class CoreGameScript : MonoBehaviour
                         break;
                     case 2: //The actor is suspicious enough to declare someone of murder
                         PhaseDelay = ShortDelay;
-                        int randomStatement2 = UnityEngine.Random.Range(1, 4);
-                        switch (randomStatement2)
+                        int randomStatementGuilt = UnityEngine.Random.Range(1, 4);
+                        switch (randomStatementGuilt)
                         {
                             case 1:
                                 TextboxAppend(GeneralPublic[ActorID].Name + " accuses " + GeneralPublic[decision].Name + " of murder!");
@@ -370,7 +403,8 @@ public class CoreGameScript : MonoBehaviour
         {
             TextboxAppend("You are dead. Whatever the conclusion to this tale, you will not see it...");
             TextboxAppend("You loose.");
-            GamePhase = 1000;
+            ShowAllIcons();
+            GamePhase = 999;
         }
     }
 
@@ -390,6 +424,14 @@ public class CoreGameScript : MonoBehaviour
             GeneralPublic[i].Paranoia();
         }
         AnnouncementBuffer += (GeneralPublic[decision].Name + " was murdered during the night!"); //stores the death announcement for night's end. 
+    }
+
+    public void ShowAllIcons()
+    {
+        for (int i = 1; i < GeneralPublic.Length; i++)
+        {
+            GeneralPublic[i].SetTrueIcon();
+        }
     }
 
     public void ProgressPhase()
@@ -575,6 +617,7 @@ public class CoreGameScript : MonoBehaviour
                 GamePhase = 42;
                 break;
             case 42: //investigative sub-phase
+                PhaseDelay = MicroDelay;
                 if (Hat.Length != 0)
                 {
                     rng = UnityEngine.Random.Range(1, Hat.Length) - 1;
@@ -583,33 +626,44 @@ public class CoreGameScript : MonoBehaviour
                         TextboxAppend("Investigative test: " + Hat[rng]);
                         GamePhase = 400; //playerphase
                         Hat = Hat.Where(w => w != Hat[rng]).ToArray(); //remove player's number from the hat
-                        PhaseDelay = MicroDelay;
+                        //PhaseDelay = MicroDelay;
                         break;
                     }
                     else
                     {
                         rng = UnityEngine.Random.Range(1, Hat.Length) - 1;
+                        TextboxAppend("InvestigativeTest: " + rng + ", " + Hat.Length);
                         switch (GeneralPublic[Hat[rng]].Role)
                         {
                             case "Seer":
                                 for (int i = 1; i < 4; i++)
                                 {
-                                    int decision = GeneralPublic[UnityEngine.Random.Range(1, GeneralPublic.Length) - 1].ID;
-                                    if (decision == Hat[rng])
+                                    int decisionSeer = Alive[UnityEngine.Random.Range(1, Alive.Length) - 1];
+                                    if (decisionSeer == Hat[rng])
                                     {
                                         i--;
                                     }
                                     else
                                     {
-                                        if (GeneralPublic[decision].Role == "Murderer"){
-                                            GeneralPublic[Hat[rng]].Suspect = decision;
-                                        }
-                                        else
-                                        {
-                                            GeneralPublic[Hat[rng]].DropSuspicion(decision);
+                                        if (!GeneralPublic[decisionSeer].isEvil){
+                                            GeneralPublic[Hat[rng]].DropSuspicion(decisionSeer);
                                         }
                                     }
                                 }
+                                Hat = Hat.Where(w => w != Hat[rng]).ToArray();
+                                //PhaseDelay = MicroDelay;
+                                break;
+                            case "Investigator":
+                                int decisionInvestigator = Alive[UnityEngine.Random.Range(1, Alive.Length) - 1];
+                                if (GeneralPublic[decisionInvestigator].isEvil){
+                                    GeneralPublic[Hat[rng]].AddAmnity(decisionInvestigator, 100);
+                                }
+                                else
+                                {
+                                    GeneralPublic[Hat[rng]].DropSuspicion(decisionInvestigator);
+                                }
+                                Hat = Hat.Where(w => w != Hat[rng]).ToArray();
+                                //PhaseDelay = MicroDelay;
                                 break;
                         }
                     }
@@ -617,10 +671,10 @@ public class CoreGameScript : MonoBehaviour
                 else
                 { //if no numbers are in the hat
                     GamePhase = 425; //end phase
-                    PhaseDelay = MicroDelay;
+                    //PhaseDelay = MicroDelay;
                     break;
                 }
-                PhaseDelay = MicroDelay;
+                //PhaseDelay = MicroDelay;
                 break;
             case 425://setup protective sub-phase
                 Hat = ProtectiveIndex;
@@ -655,18 +709,16 @@ public class CoreGameScript : MonoBehaviour
                 GamePhase = 44;
                 break;
             case 44: //killer sub-phase
-                TextboxAppend("Hate length is " + Hat.Length);
+                //TextboxAppend("Hate length is " + Hat.Length); //debug feedback
                 if (Hat.Length != 0)
                 {
                     rng = UnityEngine.Random.Range(1, Hat.Length) - 1;
                     switch (GeneralPublic[Hat[rng]].Role)
                     {
                         case "Murderer":
-                            
-                            
                             Murder(Hat[rng]);
-                            PhaseDelay = MicroDelay;
                             Hat = Hat.Where(w => w != Hat[rng]).ToArray();
+                            PhaseDelay = MicroDelay;
                             break;
 
                     }
@@ -687,9 +739,22 @@ public class CoreGameScript : MonoBehaviour
                 break;
             case 49: //post-intermission
                 TextboxAppend(AnnouncementBuffer);
+                AnnouncementBuffer = ""; //empties the announcement buffer
                 NighttoDay();
-                PhaseDelay = MicroDelay;
-                GamePhase = 1;
+                PhaseDelay = StandardDelay;
+                int EvilTalley = 0;
+                for (int i = 1; i < GeneralPublic.Length; i++)
+                {
+                    if (GeneralPublic[i].isEvil) EvilTalley++;
+                }
+                if (EvilTalley == 0){
+                    GamePhase = 1000; //game end  (win)
+                    PhaseDelay = ShortDelay;
+                    TextboxAppend("Come morning, no innocent are found dead. Or the night after that, or after that");
+
+                }
+                else GamePhase = 1;
+                
                 break;
             case 400: //player's turn to night action
                 switch (GeneralPublic[0].Role)
@@ -722,19 +787,26 @@ public class CoreGameScript : MonoBehaviour
                 PhaseDelay = LongDelay;
                 break;
             case 103:
-                //TextboxAppend("Soon the sun sets, and darkness blankets the town");
-                //TextboxAppend("Test1:" +  GeneralPublic.Length);
-                // TextboxAppend("Test2:" + CountOfHeads.Length);
-                //TextboxAppend("Test3:" + (GeneralPublic[0].Avatar != null)); 
-                //TextboxAppend("Test4:" + GeneralPublic[1].ID);
-                //TextboxAppend("Test5:" + (GeneralPublic[1].Avatar != null));
-                //TextboxAppend("Test66:" + GeneralPublic[5].ID);
-                //TextboxAppend("Test7:" + (GeneralPublic[5].Avatar != null));
-                //TextboxAppend("Test8:" + testint);
+                //DebugShowIcon();
                 GamePhase = 4;
                 PhaseDelay = ShortDelay;
                 break;
+            case 1000:
+                TextboxAppend("After a week has passed, whom remains are sure that the troubled times has passed");
+                PhaseDelay = ShortDelay;
+                GamePhase = 1001;
+                break;
+            case 1001:
+                TextboxAppend("You soon resume your journey, taking the well wishes of the village with you");
+                GamePhase = 1002;
+                PhaseDelay = ShortDelay;
+                break;
+            case 1002:
+                TextboxAppend("\n\nYou have won.");
+                ShowAllIcons();
+                break;
         }
+
     }
 
     public void ButtonsOn()
@@ -763,20 +835,21 @@ class Actor
     public int[] Amnity;
     public GameObject Avatar;
     public int[] Suspicion;
-    public int Suspect; //This is used by special roles, where an actor identified a suspect
+    public int[] KnownInnocent; //This is used by special roles, where an actor identified a suspect
     public bool Alive;
     public Sprite Icon;
     public Sprite TrueIcon;
     public bool isEvil; //Simpler indicator of if the actor is an "antagonist"
     //private Random random;
     public Actor(int ActorNum, int totalActors, Sprite StartingIcon)
-    {
+    { //Initializes an actor with default values
         ID = ActorNum;
         Amnity = new int[totalActors];
         Suspicion = new int[totalActors];
         Alive = true;
         Role = "Citizen";
         Icon = StartingIcon;
+        TrueIcon = Icon;
         isEvil = false;
         SetAmnity(totalActors);
     }
@@ -825,16 +898,29 @@ class Actor
         }
         return -1;
     }
+    public int Verify()
+    { //Investigative exclusive, can return confirmed evil or innocent.
+        if (Suspicion.Max() > 99)
+        {
+            return Array.IndexOf(Suspicion, Suspicion.Max());
+        }
+        return -1;
+    }
     public void Death()
     {
         Alive = false;
         Icon = TrueIcon;
+        Avatar.GetComponent<ActorScript>().SetIcon(Icon);
         Avatar.GetComponent<ActorScript>().SetAnkh(true);
     }
     public void SetIcon(Sprite InIcon)
     {
         Icon = InIcon;
         Avatar.GetComponent<ActorScript>().SetIcon(Icon);
+    }
+    public void SetTrueIcon()
+    {
+        Avatar.GetComponent<ActorScript>().SetIcon(TrueIcon);
     }
     public void SetupAvatar(Sprite InIcon)
     {
