@@ -52,14 +52,12 @@ public class CoreGameScript : MonoBehaviour
     public Sprite MagnifyingGlassIcon;
     public Sprite LipsIcon;
 
-    public int testint;
-
-    public bool debug;
+    public bool debug; //assigned in unity editor
 
     private void Awake()
     {
         current = this;
-        DontDestroyOnLoad(gameObject);
+        DontDestroyOnLoad(gameObject); //modifies this object so it is not lost when changing scenes
         initialize(); //sets up the game, but can be recalled if a game needs to be restarted. 
     }
 
@@ -80,16 +78,18 @@ public class CoreGameScript : MonoBehaviour
         //This is used to start a new game, seperated from awake() or start() to support starting a new game mid-runtime
         GamePhase = 100;
         PhaseDelay = ShortDelay;
-        GeneralPublic = new Actor[ActorQuantity];
-        Alive = new int[ActorQuantity];
+        GeneralPublic = new Actor[ActorQuantity]; //initial declaration of Actor[]
+        Alive = new int[ActorQuantity]; //An additional int[] used for efficently tracking who is "alive" without inefficently searching Actor[] or altering Actor[]
         for (int i = 0; i < ActorQuantity; i++)
         {
+            //instantiate new entry in Actor[] and int[]
             GeneralPublic[i] = new Actor(i, ActorQuantity, PersonIcon);
             Alive[i] = i;
         }
-        string[] UnusedNames = NameRegistry;
+        string[] UnusedNames = NameRegistry; //declares a full registry of unused names
         for (int i = 1; i < ActorQuantity; i++)
         {
+            //this loop assigns unused names, and removes them from unused name registry
             rng = UnityEngine.Random.Range(0, UnusedNames.Length - 1);
             GeneralPublic[i].Name = UnusedNames[rng];
             UnusedNames = UnusedNames.Where(w => w != UnusedNames[rng]).ToArray();
@@ -101,40 +101,37 @@ public class CoreGameScript : MonoBehaviour
             StandardDelay = 50;
             LongDelay = 75;
         }
-        SetupRoles();
+        SetupRoles(); //sets up special actor roles.
     }
 
     // Update is called once per frame
     void Update()
     {
+        //incriments timed delays and calls ProgressPhase() as appropriate
         PhaseDelay--;
         if (PhaseDelay == 0) ProgressPhase();
     }
 
-    public void startTest()
-    {
-        ChangeSprite(0, CompassIcon);
-        TextboxAppend("test");
-    }
-
     public void ChangeSprite(int refId, Sprite swapIn)
     {
+        //Identifies a targeted actor's <Image>, and changes sprite to the input
         anImage = GeneralPublic[refId].Avatar.GetComponent<Image>();
         anImage.sprite = swapIn;
     }
 
-    public void TextboxAppend(string textToAdd) => Textbox?.GetComponent<TextboxScript>().AddText("\n" + textToAdd);
+    public void TextboxAppend(string textToAdd) => Textbox?.GetComponent<TextboxScript>().AddText("\n" + textToAdd); //Adds a string of text to target Scroll View
 
     public void DayToNight()
     {
+        //changes background to night scene
         DaySky.SetActive(false);
         NightSky.SetActive(true);
         DayNightIcon.sprite = NightIcon;
         isDay = false;
-
     }
     public void NighttoDay()
     {
+        //changes background to day scene
         DaySky.SetActive(true);
         NightSky.SetActive(false);
         DayNightIcon.sprite = DayIcon;
@@ -144,7 +141,8 @@ public class CoreGameScript : MonoBehaviour
 
     public void ButtonClicked(int buttonID)
     {
-        TextboxAppend("Button " + buttonID.ToString() + " pressed");//buttonID
+        //controls user input related to clicking on sprite icons
+        if (debug) TextboxAppend("Button " + buttonID.ToString() + " pressed");//buttonID
         switch (GamePhase)
         {
             case 200://player's statement
@@ -160,32 +158,37 @@ public class CoreGameScript : MonoBehaviour
 
     void SetupRoles()
     {
-        SetupHat();
+        SetupHat(); //sets up a fresh hat
+        //sets up new indices for each role type
         SocialIndex = new int[GeneralPublic.Length];
         InvestigativeIndex = new int[GeneralPublic.Length];
         ProtectiveIndex = new int[GeneralPublic.Length];
         KillerIndex  = new int[GeneralPublic.Length];
         rng = Hat[UnityEngine.Random.Range(2, Hat.Length) - 1]; //anyone other than the player
+        //sets up a "Murderer" role
         GeneralPublic[rng].Role = "Murderer";
         GeneralPublic[rng].TrueIcon = KnifeIcon;
         GeneralPublic[rng].isEvil = true;
         KillerIndex[0] = rng;
-        Hat = Hat.Where(w => w != Hat[rng]).ToArray();
+        Hat = Hat.Where(w => w != Hat[rng]).ToArray(); //takes the number out of the hat
         rng = Hat[UnityEngine.Random.Range(2, Hat.Length) - 1]; //anyone other than the player
+        //sets up the "Seer" role
         GeneralPublic[rng].Role = "Seer";
         GeneralPublic[rng].TrueIcon = CrystalBallIcon;
         InvestigativeIndex[0] = rng; 
-        Hat = Hat.Where(w => w != Hat[rng]).ToArray();
+        Hat = Hat.Where(w => w != Hat[rng]).ToArray(); //takes the number out of the hat
         rng = Hat[UnityEngine.Random.Range(2, Hat.Length) - 1]; //anyone other than the player
+        //sets up the "Investigator" role
         GeneralPublic[rng].Role = "Investigator";
         GeneralPublic[rng].TrueIcon = MagnifyingGlassIcon;
-        InvestigativeIndex[0] = rng; 
-        Hat = Hat.Where(w => w != Hat[rng]).ToArray();
+        InvestigativeIndex[1] = rng; 
+        Hat = Hat.Where(w => w != Hat[rng]).ToArray(); //takes the number out of the hat
         rng = Hat[UnityEngine.Random.Range(2, Hat.Length) - 1]; //anyone other than the player
+        //sets up the "Escort" role
         GeneralPublic[rng].Role = "Escort";
         GeneralPublic[rng].TrueIcon = LipsIcon;
         SocialIndex[0] = rng; 
-        Hat = Hat.Where(w => w != Hat[rng]).ToArray();
+        Hat = Hat.Where(w => w != Hat[rng]).ToArray(); //takes the number out of the hat
         SocialIndex = SocialIndex.Where(w => w != 0).ToArray(); //sanatize SocialIndex
         InvestigativeIndex = InvestigativeIndex.Where(w => w != 0).ToArray(); //sanatize InvestigativeIndex
         ProtectiveIndex = ProtectiveIndex.Where(w => w != 0).ToArray(); //sanatize ProtectiveIndex
@@ -193,11 +196,11 @@ public class CoreGameScript : MonoBehaviour
         return;
     }
 
-    int Talleyvotes(int PlayerVote)
+    /*int Talleyvotes(int PlayerVote) //antiquated
     {
         int accused = 0;
         return accused;
-    }
+    }*/
 
     /*int CurrentlyAlive() //This is antiquated
     //This is used to determine how many players are currently alive, for purposes such as determining game state
