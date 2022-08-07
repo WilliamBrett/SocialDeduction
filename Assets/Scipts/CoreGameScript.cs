@@ -19,9 +19,9 @@ public class CoreGameScript : MonoBehaviour
     private Image anImage; //used to specify images for alteration
     private int PhaseDelay; //PD-- on Update(), on 0 trigers change of phase
     private int MicroDelay = 1; //The length of a "micro" timed delay
-    private int ShortDelay = 25;//250 //This setting controls the length of a "short" timed delay
-    private int StandardDelay = 50;//500 //This setting controls the length of a "normal" tomed delay
-    private int LongDelay = 75;//750
+    private int ShortDelay = 250;//This setting controls the length of a "short" timed delay
+    private int StandardDelay = 500;//This setting controls the length of a "normal" timed delay
+    private int LongDelay = 750;//This setting controls the length of a "long" timed delay
     //Random names are pulled from NameRegistry to assign to Actors
     private readonly string[] NameRegistry = { "Ace", "Barbara", "Boris", "Caleb", "David", "Elizabeth", "James", "Jennifer", "Jessica", "John", "Joseph", "Linda", "Mary", "Michael", "Patricia", "Patrick", "Richard", "Robert", "Sarah", "Susan", "Thomas", "William" };
     private int[] Hat; //This is used to talley votes
@@ -94,6 +94,13 @@ public class CoreGameScript : MonoBehaviour
             GeneralPublic[i].Name = UnusedNames[rng];
             UnusedNames = UnusedNames.Where(w => w != UnusedNames[rng]).ToArray();
         }
+        if (debug)
+        {
+            //Shortens the delay for faster debugging.   
+            ShortDelay = 25;
+            StandardDelay = 50;
+            LongDelay = 75;
+        }
         SetupRoles();
     }
 
@@ -158,26 +165,26 @@ public class CoreGameScript : MonoBehaviour
         InvestigativeIndex = new int[GeneralPublic.Length];
         ProtectiveIndex = new int[GeneralPublic.Length];
         KillerIndex  = new int[GeneralPublic.Length];
-        rng = UnityEngine.Random.Range(2, Hat.Length) - 1; //anyone other than the player
+        rng = Hat[UnityEngine.Random.Range(2, Hat.Length) - 1]; //anyone other than the player
         GeneralPublic[rng].Role = "Murderer";
         GeneralPublic[rng].TrueIcon = KnifeIcon;
         GeneralPublic[rng].isEvil = true;
-        KillerIndex[0] = rng; //the number is added to the killerhat
+        KillerIndex[0] = rng;
         Hat = Hat.Where(w => w != Hat[rng]).ToArray();
-        rng = UnityEngine.Random.Range(2, Hat.Length) - 1; //anyone other than the player
+        rng = Hat[UnityEngine.Random.Range(2, Hat.Length) - 1]; //anyone other than the player
         GeneralPublic[rng].Role = "Seer";
         GeneralPublic[rng].TrueIcon = CrystalBallIcon;
-        InvestigativeIndex[0] = rng; //the number is added to the killerhat
+        InvestigativeIndex[0] = rng; 
         Hat = Hat.Where(w => w != Hat[rng]).ToArray();
-        rng = UnityEngine.Random.Range(2, Hat.Length) - 1; //anyone other than the player
+        rng = Hat[UnityEngine.Random.Range(2, Hat.Length) - 1]; //anyone other than the player
         GeneralPublic[rng].Role = "Investigator";
         GeneralPublic[rng].TrueIcon = MagnifyingGlassIcon;
-        InvestigativeIndex[0] = rng; //the number is added to the killerhat
+        InvestigativeIndex[0] = rng; 
         Hat = Hat.Where(w => w != Hat[rng]).ToArray();
-        rng = UnityEngine.Random.Range(2, Hat.Length) - 1; //anyone other than the player
+        rng = Hat[UnityEngine.Random.Range(2, Hat.Length) - 1]; //anyone other than the player
         GeneralPublic[rng].Role = "Escort";
         GeneralPublic[rng].TrueIcon = LipsIcon;
-        SocialIndex[0] = rng; //the number is added to the killerhat
+        SocialIndex[0] = rng; 
         Hat = Hat.Where(w => w != Hat[rng]).ToArray();
         SocialIndex = SocialIndex.Where(w => w != 0).ToArray(); //sanatize SocialIndex
         InvestigativeIndex = InvestigativeIndex.Where(w => w != 0).ToArray(); //sanatize InvestigativeIndex
@@ -207,7 +214,11 @@ public class CoreGameScript : MonoBehaviour
     {
         if (ActorID != 0)
         {
-            TextboxAppend("You accuse " + GeneralPublic[ActorID].Name + " of murder!");
+            TextboxAppend("You accuse " + GeneralPublic[ActorID].Name + ".");
+            for (int i = 1; i < GeneralPublic.Length; i++)
+            {
+                GeneralPublic[i].AddAmnity(ActorID, 1);
+            }
         }
         else
         {
@@ -384,6 +395,10 @@ public class CoreGameScript : MonoBehaviour
         {
             Execution(Array.IndexOf(VoteTalley, VoteTalley.Max()));
         }
+        else
+        {
+            TextboxAppend("The vote ends in indecision, nobody accued enough votes to be sentenced to death.");
+        }
     }
 
     void Execution(int executee)
@@ -411,18 +426,24 @@ public class CoreGameScript : MonoBehaviour
             ShowAllIcons();
             GamePhase = 999;
         }
+        else if (Alive.Length < 5)
+        {
+
+        }
     }
 
 
     void Murder(int MurdererId)
     {
         int decision = GeneralPublic[MurdererId].Accuse();
+        //if (debug) TextboxAppend("Murderer's target is: " + decision);
         while (decision == -1 || decision == MurdererId)
         {
             //if murderer doesn't hate anyone, they pick a random target (that is currently alive) ... other than themself. 
+            //if (debug) TextboxAppend("Murderer's new target is: " + decision);
             decision = Alive[UnityEngine.Random.Range(2, Alive.Length) - 1]; 
         }
-        TextboxAppend("Murderer is " + MurdererId + ", murderee is " + decision);
+        //if (debug) TextboxAppend("Murderer is " + MurdererId + ", murderee is " + decision);
         if (!GeneralPublic[decision].Protected)
         {
             Death(decision);
@@ -472,7 +493,8 @@ public class CoreGameScript : MonoBehaviour
                     if (Hat[rng] == 0)
                     {
                         Hat = Hat.Where(w => w != Hat[rng]).ToArray();
-                        PhaseDelay = MicroDelay;
+                        TextboxAppend("Do you wish to accuse any of the villagers?");
+                        PhaseDelay = ShortDelay;
                         GamePhase = 200;
                         break;
                     }
@@ -500,11 +522,12 @@ public class CoreGameScript : MonoBehaviour
             case 200: //player's turn to make a statement
                 if (debug)
                 {
+                    TextboxAppend("..in the interest of expediency you stay silent.");
                     PhaseDelay = MicroDelay;
                     GamePhase = 2;
                     break;
                 }
-                TextboxAppend("Do you wish to accuse any of the villagers?./n(Click on the villager you would like to accuse, or yourself to accuse nobody)");
+                TextboxAppend("(Click on the villager you would like to accuse, or yourself to accuse nobody)");
                 break;
             case 21: //post-statement
                      //TextboxAppend("debug: post-statement");
@@ -527,7 +550,8 @@ public class CoreGameScript : MonoBehaviour
                     {
                         Hat = Hat.Where(w => w != Hat[rng]).ToArray();
                         GamePhase = 300;
-                        PhaseDelay = ShortDelay;
+                        TextboxAppend("The time has come for you to vote.");
+                       PhaseDelay = ShortDelay;
                         break;
                     }
                     //if (GeneralPublic[i].ali
@@ -544,15 +568,21 @@ public class CoreGameScript : MonoBehaviour
             case 300: //player's turn to vote
                 if (debug)
                 {
+                    TextboxAppend("But in the interest of expediency you automatically forgoe your vote.");
                     PhaseDelay = MicroDelay;
                     GamePhase = 3;
                     break;
                 }
-                TextboxAppend("The time has come for you to vote./n(Click on the villager you would like to accuse, or yourself to accuse nobody)");
+                TextboxAppend("(Click on the villager you would like to accuse, or yourself to accuse nobody)");
 
                 break;
             case 31: //post-vote
                 TalleyVote();
+                GamePhase = 32;
+                PhaseDelay = ShortDelay;
+                break;
+            case 32: //post-post-vote
+                TextboxAppend("Night falls soon after the vote...");
                 GamePhase = 39;
                 PhaseDelay = ShortDelay;
                 break;
@@ -605,7 +635,7 @@ public class CoreGameScript : MonoBehaviour
                     if (Hat[rng] == 0) //if number is player
                     {
 
-                        TextboxAppend("Social test: " + Hat.Length);
+                        //TextboxAppend("Social test: " + Hat.Length);
                         GamePhase = 400; //playerphase
                         Hat = Hat.Where(w => w != Hat[rng]).ToArray(); //remove player's number from the hat
                         PhaseDelay = MicroDelay;
@@ -614,7 +644,7 @@ public class CoreGameScript : MonoBehaviour
                     else
                     {
                         rng = UnityEngine.Random.Range(1, Hat.Length) - 1;
-                        TextboxAppend("InvestigativeTest: " + rng + ", " + Hat.Length);
+                        //TextboxAppend("SocialTest: " + rng + ", " + Hat.Length);
                         switch (GeneralPublic[Hat[rng]].Role)
                         {
                             case "Escort":
@@ -626,6 +656,11 @@ public class CoreGameScript : MonoBehaviour
                                 }
                                 Hat = Hat.Where(w => w != Hat[rng]).ToArray(); //remove actor's number from the hat
                                 PhaseDelay = MicroDelay;
+                                break;
+                            default:
+                                TextboxAppend("Error: Social role for " + Hat[rng] + " not properly assigned.");
+                                PhaseDelay = LongDelay;
+                                Hat = Hat.Where(w => w != Hat[rng]).ToArray();
                                 break;
                         }
                     }
@@ -652,22 +687,22 @@ public class CoreGameScript : MonoBehaviour
                     if (GeneralPublic[Hat[rng]].Blocked)
                     {
                         Hat = Hat.Where(w => w != Hat[rng]).ToArray();
-                        PhaseDelay = MicroDelay;
+                        //PhaseDelay = MicroDelay; redundant
                         break;
 
                     }
                     else if (Hat[rng] == 0) //if number is player
                     {
-                        TextboxAppend("Investigative test: " + Hat[rng]);
+                        //TextboxAppend("Investigative test: " + Hat[rng]);
                         GamePhase = 400; //playerphase
                         Hat = Hat.Where(w => w != Hat[rng]).ToArray(); //remove player's number from the hat
-                        //PhaseDelay = MicroDelay;
+                        //PhaseDelay = MicroDelay; redundant
                         break;
                     }
                     else
                     {
                         rng = UnityEngine.Random.Range(1, Hat.Length) - 1;
-                        TextboxAppend("InvestigativeTest: " + rng + ", " + Hat.Length);
+                        //TextboxAppend("InvestigativeTest: " + rng + ", " + Hat.Length);
                         switch (GeneralPublic[Hat[rng]].Role)
                         {
                             case "Seer":
@@ -699,6 +734,11 @@ public class CoreGameScript : MonoBehaviour
                                 }
                                 Hat = Hat.Where(w => w != Hat[rng]).ToArray();
                                 //PhaseDelay = MicroDelay;
+                                break;
+                            default:
+                                TextboxAppend("Error: Investigative role for " + Hat[rng] + " not properly assigned.");
+                                PhaseDelay = LongDelay;
+                                Hat = Hat.Where(w => w != Hat[rng]).ToArray();
                                 break;
                         }
                     }
@@ -752,13 +792,17 @@ public class CoreGameScript : MonoBehaviour
                 break;
             case 44: //killer sub-phase
                 //TextboxAppend("Hate length is " + Hat.Length); //debug feedback
+                PhaseDelay = MicroDelay;
+                if (debug) TextboxAppend("Murder phase start.");
                 if (Hat.Length != 0)
                 {
                     rng = UnityEngine.Random.Range(1, Hat.Length) - 1;
+                    if (debug)  TextboxAppend("Murderer is: " + Hat[rng]); //one murderer, "the murderer is 0!"
                     if (GeneralPublic[Hat[rng]].Blocked)
                     {
+                        if (debug) TextboxAppend("The murderer is blocked!");
                         Hat = Hat.Where(w => w != Hat[rng]).ToArray();
-                        PhaseDelay = MicroDelay;
+                        //PhaseDelay = MicroDelay; //redundant
                         break;
 
                     }
@@ -767,42 +811,47 @@ public class CoreGameScript : MonoBehaviour
                         case "Murderer":
                             Murder(Hat[rng]);
                             Hat = Hat.Where(w => w != Hat[rng]).ToArray();
-                            PhaseDelay = MicroDelay;
+                            //PhaseDelay = MicroDelay; //redundant
+                            break;
+                        default:
+                            TextboxAppend("Error: Killer role for " + Hat[rng] + " not properly assigned.");
+                            //PhaseDelay = LongDelay;
+                            Hat = Hat.Where(w => w != Hat[rng]).ToArray();
                             break;
 
-                    }
+                        }
                 }
                 else
                 { //if no numbers are in the hat
                     GamePhase = 49; //end phase
-                    PhaseDelay = MicroDelay;
+                    //PhaseDelay = MicroDelay; redundant
                     break;
                 }
-                PhaseDelay = MicroDelay;
-                break;
-            case 45: //Intermission Ends
-                //TextboxAppend("debug: post-intermission");
-                NighttoDay();
-                PhaseDelay = MicroDelay;
-                GamePhase = 1;
+                
                 break;
             case 49: //post-intermission
                 TextboxAppend(AnnouncementBuffer);
                 AnnouncementBuffer = ""; //empties the announcement buffer
                 NighttoDay();
                 PhaseDelay = StandardDelay;
-                int EvilTalley = 0;
-                for (int i = 1; i < GeneralPublic.Length; i++)
+                int EvilTalley = 0; //killer index ix not used to future proof circumstance of non-antagonistic killer roles
+                for (int i = 1; i < Alive.Length; i++)
                 {
-                    if (GeneralPublic[i].isEvil) EvilTalley++;
-                    GeneralPublic[i].Blocked = false;
-                    GeneralPublic[i].Protected = false;
+                    if (GeneralPublic[Alive[i]].isEvil) EvilTalley++;
+                    GeneralPublic[Alive[i]].Blocked = false;
+                    GeneralPublic[Alive[i]].Protected = false;
                 }
                 if (EvilTalley == 0){
                     GamePhase = 1000; //game end  (win)
                     PhaseDelay = ShortDelay;
-                    TextboxAppend("Come morning, no innocent are found dead. Or the night after that, or after that");
+                    TextboxAppend("Come morning, no innocents are found dead. Or the night after that, or after that");
 
+                }
+                else if (Alive.Length < 5)
+                {
+                    GamePhase = 1100;
+                    TextboxAppend("With so few remaining, you flee for your life.");
+                    PhaseDelay = ShortDelay;
                 }
                 else GamePhase = 1;
                 
@@ -854,6 +903,10 @@ public class CoreGameScript : MonoBehaviour
                 break;
             case 1002:
                 TextboxAppend("\n\nYou have won.");
+                ShowAllIcons();
+                break;
+            case 1100:
+                TextboxAppend("\n\nYou loose.");
                 ShowAllIcons();
                 break;
         }

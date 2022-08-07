@@ -386,6 +386,7 @@
 "Assets/Scipts/ButtonScript.cs"
 "Assets/Scipts/CoreGameScript.cs"
 "Assets/Scipts/DayNightScript.cs"
+"Assets/Scipts/ExitScript.cs"
 "Assets/Scipts/IconDemoScript.cs"
 "Assets/Scipts/IconScriptPrototype.cs"
 "Assets/Scipts/PersistenceScript.cs"
