@@ -9,7 +9,7 @@ public class TextboxScript : MonoBehaviour
     private TextMeshProUGUI textMeshPro;
 
     // Start is called before the first frame update
-    void Start()
+    public void Start() //public so it can be called by testing
     {
         textMeshPro = GetComponent<TextMeshProUGUI>();
     }

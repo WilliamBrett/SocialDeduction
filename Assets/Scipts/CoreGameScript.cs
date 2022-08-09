@@ -17,9 +17,9 @@ public class CoreGameScript : MonoBehaviour
     private GameObject Textbox; //The object that text is written to
     public int GamePhase; //Controls the current state of the game
     private Image anImage; //used to specify images for alteration
-    private int PhaseDelay; //PD-- on Update(), on 0 trigers change of phase
+    public int PhaseDelay; //PD-- on Update(), on 0 trigers change of phase
     private int MicroDelay = 1; //The length of a "micro" timed delay
-    private int ShortDelay = 250;//This setting controls the length of a "short" timed delay
+    public int ShortDelay = 250;//This setting controls the length of a "short" timed delay
     private int StandardDelay = 500;//This setting controls the length of a "normal" timed delay
     private int LongDelay = 750;//This setting controls the length of a "long" timed delay
     //Random names are pulled from NameRegistry to assign to Actors
@@ -58,11 +58,11 @@ public class CoreGameScript : MonoBehaviour
     {
         current = this;
         DontDestroyOnLoad(gameObject); //modifies this object so it is not lost when changing scenes
-        initialize(); //sets up the game, but can be recalled if a game needs to be restarted. 
+        Initialize(); //sets up the game, but can be recalled if a game needs to be restarted. 
     }
 
     // Start is called before the first frame update
-    private void Start()
+    public void Start() //public so it can be caled by testing
     {
         CountOfHeads = GameObject.FindGameObjectsWithTag("Actor"); //CountOfHeads is setup
         Textbox = GameObject.FindGameObjectWithTag("Textbox"); //Textbox is setup
@@ -73,7 +73,7 @@ public class CoreGameScript : MonoBehaviour
         }
     }
 
-    void initialize()
+    public void Initialize() //public so it can be called by testing
     {
         //This is used to start a new game, seperated from awake() or start() to support starting a new game mid-runtime
         GamePhase = 100;
@@ -164,30 +164,30 @@ public class CoreGameScript : MonoBehaviour
         InvestigativeIndex = new int[GeneralPublic.Length];
         ProtectiveIndex = new int[GeneralPublic.Length];
         KillerIndex  = new int[GeneralPublic.Length];
-        rng = Hat[UnityEngine.Random.Range(2, Hat.Length) - 1]; //anyone other than the player
+        rng = UnityEngine.Random.Range(2, Hat.Length) - 1; //anyone other than the player
         //sets up a "Murderer" role
-        GeneralPublic[rng].Role = "Murderer";
-        GeneralPublic[rng].TrueIcon = KnifeIcon;
-        GeneralPublic[rng].isEvil = true;
-        KillerIndex[0] = rng;
+        GeneralPublic[Hat[rng]].Role = "Murderer";
+        GeneralPublic[Hat[rng]].TrueIcon = KnifeIcon;
+        GeneralPublic[Hat[rng]].isEvil = true;
+        KillerIndex[0] = Hat[rng];
         Hat = Hat.Where(w => w != Hat[rng]).ToArray(); //takes the number out of the hat
-        rng = Hat[UnityEngine.Random.Range(2, Hat.Length) - 1]; //anyone other than the player
+        rng = UnityEngine.Random.Range(2, Hat.Length) - 1; //anyone other than the player
         //sets up the "Seer" role
-        GeneralPublic[rng].Role = "Seer";
-        GeneralPublic[rng].TrueIcon = CrystalBallIcon;
-        InvestigativeIndex[0] = rng; 
+        GeneralPublic[Hat[rng]].Role = "Seer";
+        GeneralPublic[Hat[rng]].TrueIcon = CrystalBallIcon;
+        InvestigativeIndex[0] = Hat[rng]; 
         Hat = Hat.Where(w => w != Hat[rng]).ToArray(); //takes the number out of the hat
-        rng = Hat[UnityEngine.Random.Range(2, Hat.Length) - 1]; //anyone other than the player
+        rng = UnityEngine.Random.Range(2, Hat.Length) - 1; //anyone other than the player
         //sets up the "Investigator" role
-        GeneralPublic[rng].Role = "Investigator";
-        GeneralPublic[rng].TrueIcon = MagnifyingGlassIcon;
-        InvestigativeIndex[1] = rng; 
+        GeneralPublic[Hat[rng]].Role = "Investigator";
+        GeneralPublic[Hat[rng]].TrueIcon = MagnifyingGlassIcon;
+        InvestigativeIndex[1] = Hat[rng]; 
         Hat = Hat.Where(w => w != Hat[rng]).ToArray(); //takes the number out of the hat
-        rng = Hat[UnityEngine.Random.Range(2, Hat.Length) - 1]; //anyone other than the player
+        rng = UnityEngine.Random.Range(2, Hat.Length) - 1; //anyone other than the player
         //sets up the "Escort" role
-        GeneralPublic[rng].Role = "Escort";
-        GeneralPublic[rng].TrueIcon = LipsIcon;
-        SocialIndex[0] = rng; 
+        GeneralPublic[Hat[rng]].Role = "Escort";
+        GeneralPublic[Hat[rng]].TrueIcon = LipsIcon;
+        SocialIndex[0] = Hat[rng]; 
         Hat = Hat.Where(w => w != Hat[rng]).ToArray(); //takes the number out of the hat
         SocialIndex = SocialIndex.Where(w => w != 0).ToArray(); //sanatize SocialIndex
         InvestigativeIndex = InvestigativeIndex.Where(w => w != 0).ToArray(); //sanatize InvestigativeIndex
@@ -457,6 +457,11 @@ public class CoreGameScript : MonoBehaviour
             AnnouncementBuffer += (GeneralPublic[decision].Name + " was murdered during the night!"); //stores the death announcement for night's end. 
         }
         
+    }
+
+    public GameObject getTextbox()
+    {
+        return Textbox;
     }
 
     public void ShowAllIcons()

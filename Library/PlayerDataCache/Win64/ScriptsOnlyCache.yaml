@@ -1,6 +1,6 @@
 ScriptsOnlyBuild:
   usedScripts:
-    Assembly-CSharp.dll:
+    NewAssembly.dll:
     - ActorScript
     - ButtonScript
     - CoreGameScript
@@ -11,13 +11,20 @@ ScriptsOnlyBuild:
     Unity.2D.IK.Editor.dll:
     - UnityEditor.U2D.IK.IKEditorManager
     Unity.2D.Tilemap.Editor.dll:
+    - UnityEditor.Tilemaps.GridBrush
     - UnityEditor.Tilemaps.GridPaintingState
     - UnityEditor.Tilemaps.GridPaletteBrushes
     - UnityEditor.Tilemaps.GridPalettes
     - UnityEditor.Tilemaps.SceneViewGridManager
     - UnityEditor.Tilemaps.SceneViewOpenTilePaletteHelper
     - UnityEditor.Tilemaps.TileDragAndDropManager
+    - UnityEditor.Tilemaps.TilemapEditorToolPreferences
     - UnityEditor.Tilemaps.TilemapPrefabStageHelper
+    Unity.2D.Tilemap.Extras.Editor.dll:
+    - UnityEditor.Tilemaps.GameObjectBrush
+    - UnityEditor.Tilemaps.GroupBrush
+    - UnityEditor.Tilemaps.LineBrush
+    - UnityEditor.Tilemaps.RandomBrush
     Unity.RenderPipelines.Core.Runtime.dll:
     - UnityEngine.Rendering.UI.DebugUIHandlerBitField
     - UnityEngine.Rendering.UI.DebugUIHandlerButton
@@ -57,6 +64,7 @@ ScriptsOnlyBuild:
     - UnityEngine.Rendering.Universal.UniversalRenderPipelineGlobalSettings
     Unity.Rider.Editor.dll:
     - Packages.Rider.Editor.UnitTesting.CallbackData
+    - Packages.Rider.Editor.UnitTesting.SyncTestRunEventsHandler
     Unity.ShaderGraph.Editor.dll:
     - UnityEditor.ShaderGraph.SubGraphAsset
     Unity.TextMeshPro.dll:
@@ -67,9 +75,20 @@ ScriptsOnlyBuild:
     - TMPro.TMP_StyleSheet
     - TMPro.TextMeshProUGUI
     UnityEditor.TestRunner.dll:
+    - TestRunner.Callbacks.WindowResultUpdaterDataHolder
+    - UnityEditor.TestRunner.TestLaunchers.RemotePlayerLogController
     - UnityEditor.TestTools.TestRunner.Api.CallbacksHolder
+    - UnityEditor.TestTools.TestRunner.CommandLineTest.RunData
+    - UnityEditor.TestTools.TestRunner.RerunCallbackData
     - UnityEditor.TestTools.TestRunner.TestListCacheData
     - UnityEditor.TestTools.TestRunner.TestRun.TestJobDataHolder
+    - UnityEditor.TestTools.TestRunner.TestRunnerWindow
+    UnityEngine.TestRunner.dll:
+    - UnityEngine.TestRunner.Utils.TestRunCallbackListener
+    - UnityEngine.TestTools.TestRunner.Callbacks.PlayModeRunnerCallback
+    - UnityEngine.TestTools.TestRunner.Callbacks.PlayerQuitHandler
+    - UnityEngine.TestTools.TestRunner.Callbacks.RemoteTestResultSender
+    - UnityEngine.TestTools.TestRunner.PlaymodeTestsController
     UnityEngine.UI.dll:
     - UnityEngine.EventSystems.EventSystem
     - UnityEngine.EventSystems.EventTrigger
@@ -116,6 +135,13 @@ ScriptsOnlyBuild:
     - UnityEngine.Events.PersistentCallGroup
     - UnityEngine.Events.PersistentListenerMode
     - UnityEngine.RectOffset
+    UnityEngine.TestRunner:
+    - UnityEngine.TestTools.TestRunner.GUI.RuntimeTestRunnerFilter
+    - UnityEngine.TestTools.TestRunner.PlaymodeTestsControllerSettings
+    - UnityEngine.TestTools.TestRunner.RunFinishedEvent
+    - UnityEngine.TestTools.TestRunner.RunStartedEvent
+    - UnityEngine.TestTools.TestRunner.TestFinishedEvent
+    - UnityEngine.TestTools.TestRunner.TestStartedEvent
     UnityEngine.TextCoreFontEngineModule:
     - UnityEngine.TextCore.FaceInfo
     - UnityEngine.TextCore.Glyph
@@ -135,12 +161,54 @@ ScriptsOnlyBuild:
     - UnityEngine.UI.SpriteState
     - UnityEngine.UI.Toggle/ToggleEvent
   methodsToPreserve:
-  - assembly: Assembly-CSharp
-    fullTypeName: ExitScript
-    methodName: ExitGame
-  - assembly: Assembly-CSharp
-    fullTypeName: ButtonScript
-    methodName: LoadScene
+  - assembly: UnityEngine.TestRunner
+    fullTypeName: UnityEngine.TestTools.TestRunner.Callbacks.PlayModeRunnerCallback
+    methodName: TestStarted
+  - assembly: UnityEngine.TestRunner
+    fullTypeName: UnityEngine.TestTools.TestRunner.Callbacks.RemoteTestResultSender
+    methodName: TestStarted
+  - assembly: UnityEngine.TestRunner
+    fullTypeName: UnityEngine.TestTools.TestRunner.Callbacks.PlayerQuitHandler
+    methodName: TestStarted
+  - assembly: UnityEngine.TestRunner
+    fullTypeName: UnityEngine.TestRunner.Utils.TestRunCallbackListener
+    methodName: TestStarted
+  - assembly: UnityEngine.TestRunner
+    fullTypeName: UnityEngine.TestTools.TestRunner.Callbacks.PlayModeRunnerCallback
+    methodName: TestFinished
+  - assembly: UnityEngine.TestRunner
+    fullTypeName: UnityEngine.TestTools.TestRunner.Callbacks.RemoteTestResultSender
+    methodName: TestFinished
+  - assembly: UnityEngine.TestRunner
+    fullTypeName: UnityEngine.TestTools.TestRunner.Callbacks.PlayerQuitHandler
+    methodName: TestFinished
+  - assembly: UnityEngine.TestRunner
+    fullTypeName: UnityEngine.TestRunner.Utils.TestRunCallbackListener
+    methodName: TestFinished
+  - assembly: UnityEngine.TestRunner
+    fullTypeName: UnityEngine.TestTools.TestRunner.Callbacks.PlayModeRunnerCallback
+    methodName: RunStarted
+  - assembly: UnityEngine.TestRunner
+    fullTypeName: UnityEngine.TestTools.TestRunner.Callbacks.RemoteTestResultSender
+    methodName: RunStarted
+  - assembly: UnityEngine.TestRunner
+    fullTypeName: UnityEngine.TestTools.TestRunner.Callbacks.PlayerQuitHandler
+    methodName: RunStarted
+  - assembly: UnityEngine.TestRunner
+    fullTypeName: UnityEngine.TestRunner.Utils.TestRunCallbackListener
+    methodName: RunStarted
+  - assembly: UnityEngine.TestRunner
+    fullTypeName: UnityEngine.TestTools.TestRunner.Callbacks.PlayModeRunnerCallback
+    methodName: RunFinished
+  - assembly: UnityEngine.TestRunner
+    fullTypeName: UnityEngine.TestTools.TestRunner.Callbacks.RemoteTestResultSender
+    methodName: RunFinished
+  - assembly: UnityEngine.TestRunner
+    fullTypeName: UnityEngine.TestTools.TestRunner.Callbacks.PlayerQuitHandler
+    methodName: RunFinished
+  - assembly: UnityEngine.TestRunner
+    fullTypeName: UnityEngine.TestRunner.Utils.TestRunCallbackListener
+    methodName: RunFinished
   - assembly: Unity.RenderPipelines.Core.Runtime
     fullTypeName: UnityEngine.Rendering.UI.DebugUIHandlerUIntField
     methodName: OnDecrement
@@ -174,46 +242,185 @@ ScriptsOnlyBuild:
   - assembly: Unity.RenderPipelines.Core.Runtime
     fullTypeName: UnityEngine.Rendering.UI.DebugUIHandlerPanel
     methodName: ResetDebugManager
-  - assembly: Assembly-CSharp
-    fullTypeName: ActorScript
-    methodName: ButtonClicked
-  - assembly: Assembly-CSharp
-    fullTypeName: ActorScript
-    methodName: ButtonClicked
-  - assembly: Assembly-CSharp
-    fullTypeName: ActorScript
-    methodName: ButtonClicked
-  - assembly: Assembly-CSharp
+  - assembly: NewAssembly
     fullTypeName: ExitScript
     methodName: ExitGame
-  - assembly: Assembly-CSharp
+  - assembly: NewAssembly
+    fullTypeName: ButtonScript
+    methodName: LoadScene
+  - assembly: NewAssembly
     fullTypeName: ActorScript
     methodName: ButtonClicked
-  - assembly: Assembly-CSharp
+  - assembly: NewAssembly
     fullTypeName: ActorScript
     methodName: ButtonClicked
-  - assembly: Assembly-CSharp
+  - assembly: NewAssembly
     fullTypeName: ActorScript
     methodName: ButtonClicked
-  - assembly: Assembly-CSharp
+  - assembly: NewAssembly
+    fullTypeName: ExitScript
+    methodName: ExitGame
+  - assembly: NewAssembly
     fullTypeName: ActorScript
     methodName: ButtonClicked
-  - assembly: Assembly-CSharp
+  - assembly: NewAssembly
     fullTypeName: ActorScript
     methodName: ButtonClicked
-  - assembly: Assembly-CSharp
+  - assembly: NewAssembly
     fullTypeName: ActorScript
     methodName: ButtonClicked
-  - assembly: Assembly-CSharp
+  - assembly: NewAssembly
     fullTypeName: ActorScript
     methodName: ButtonClicked
-  - assembly: Assembly-CSharp
+  - assembly: NewAssembly
     fullTypeName: ActorScript
     methodName: ButtonClicked
-  - assembly: Assembly-CSharp
+  - assembly: NewAssembly
+    fullTypeName: ActorScript
+    methodName: ButtonClicked
+  - assembly: NewAssembly
+    fullTypeName: ActorScript
+    methodName: ButtonClicked
+  - assembly: NewAssembly
+    fullTypeName: ActorScript
+    methodName: ButtonClicked
+  - assembly: NewAssembly
     fullTypeName: ActorScript
     methodName: ButtonClicked
   sceneClasses:
+    Assets/InitTestScene637955944111295943.unity:
+    - Class: 1
+      Script: {instanceID: 0}
+    - Class: 4
+      Script: {instanceID: 0}
+    - Class: 21
+      Script: {instanceID: 0}
+    - Class: 28
+      Script: {instanceID: 0}
+    - Class: 48
+      Script: {instanceID: 0}
+    - Class: 49
+      Script: {instanceID: 0}
+    - Class: 104
+      Script: {instanceID: 0}
+    - Class: 114
+      Script: {instanceID: 1730}
+    - Class: 114
+      Script: {instanceID: 1732}
+    - Class: 114
+      Script: {instanceID: 1734}
+    - Class: 114
+      Script: {instanceID: 1736}
+    - Class: 114
+      Script: {instanceID: 1738}
+    - Class: 114
+      Script: {instanceID: 1748}
+    - Class: 114
+      Script: {instanceID: 1992}
+    - Class: 114
+      Script: {instanceID: 2748}
+    - Class: 114
+      Script: {instanceID: 2826}
+    - Class: 114
+      Script: {instanceID: 2846}
+    - Class: 114
+      Script: {instanceID: 2992}
+    - Class: 114
+      Script: {instanceID: 3136}
+    - Class: 114
+      Script: {instanceID: 3800}
+    - Class: 114
+      Script: {instanceID: 4306}
+    - Class: 114
+      Script: {instanceID: 4566}
+    - Class: 114
+      Script: {instanceID: 4604}
+    - Class: 114
+      Script: {instanceID: 4714}
+    - Class: 114
+      Script: {instanceID: 4844}
+    - Class: 114
+      Script: {instanceID: 4966}
+    - Class: 114
+      Script: {instanceID: 5142}
+    - Class: 114
+      Script: {instanceID: 5626}
+    - Class: 114
+      Script: {instanceID: 5794}
+    - Class: 114
+      Script: {instanceID: 5850}
+    - Class: 114
+      Script: {instanceID: 6030}
+    - Class: 114
+      Script: {instanceID: 6324}
+    - Class: 114
+      Script: {instanceID: 6474}
+    - Class: 114
+      Script: {instanceID: 7592}
+    - Class: 114
+      Script: {instanceID: 7620}
+    - Class: 114
+      Script: {instanceID: 7720}
+    - Class: 114
+      Script: {instanceID: 7732}
+    - Class: 114
+      Script: {instanceID: 8054}
+    - Class: 114
+      Script: {instanceID: 8058}
+    - Class: 114
+      Script: {instanceID: 8084}
+    - Class: 114
+      Script: {instanceID: 8526}
+    - Class: 114
+      Script: {instanceID: 8730}
+    - Class: 114
+      Script: {instanceID: 8976}
+    - Class: 114
+      Script: {instanceID: 9116}
+    - Class: 114
+      Script: {instanceID: 9122}
+    - Class: 114
+      Script: {instanceID: 9302}
+    - Class: 114
+      Script: {instanceID: 9356}
+    - Class: 114
+      Script: {instanceID: 9434}
+    - Class: 114
+      Script: {instanceID: 9570}
+    - Class: 114
+      Script: {instanceID: 9728}
+    - Class: 114
+      Script: {instanceID: 9942}
+    - Class: 114
+      Script: {instanceID: 10144}
+    - Class: 114
+      Script: {instanceID: 10498}
+    - Class: 114
+      Script: {instanceID: 10734}
+    - Class: 114
+      Script: {instanceID: 10736}
+    - Class: 114
+      Script: {instanceID: 11300}
+    - Class: 114
+      Script: {instanceID: 11790}
+    - Class: 114
+      Script: {instanceID: 12234}
+    - Class: 115
+      Script: {instanceID: 0}
+    - Class: 128
+      Script: {instanceID: 0}
+    - Class: 157
+      Script: {instanceID: 0}
+    - Class: 196
+      Script: {instanceID: 0}
+    - Class: 213
+      Script: {instanceID: 0}
+    - Class: 222
+      Script: {instanceID: 0}
+    - Class: 223
+      Script: {instanceID: 0}
+    - Class: 224
+      Script: {instanceID: 0}
     Assets/Scenes/GameScene.unity:
     - Class: 1
       Script: {instanceID: 0}
@@ -248,25 +455,25 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 4658}
     - Class: 114
-      Script: {instanceID: 5216}
+      Script: {instanceID: 5214}
     - Class: 114
-      Script: {instanceID: 5628}
+      Script: {instanceID: 5626}
     - Class: 114
       Script: {instanceID: 7510}
     - Class: 114
       Script: {instanceID: 7720}
     - Class: 114
-      Script: {instanceID: 8732}
+      Script: {instanceID: 8730}
     - Class: 114
-      Script: {instanceID: 8994}
+      Script: {instanceID: 8992}
     - Class: 114
-      Script: {instanceID: 9554}
+      Script: {instanceID: 9552}
     - Class: 114
-      Script: {instanceID: 9572}
+      Script: {instanceID: 9570}
     - Class: 114
-      Script: {instanceID: 9852}
+      Script: {instanceID: 9850}
     - Class: 114
-      Script: {instanceID: 11302}
+      Script: {instanceID: 11300}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 128
@@ -298,34 +505,14 @@ ScriptsOnlyBuild:
       Script: {instanceID: 0}
     - Class: 48
       Script: {instanceID: 0}
-    - Class: 49
-      Script: {instanceID: 0}
     - Class: 81
       Script: {instanceID: 0}
     - Class: 104
       Script: {instanceID: 0}
     - Class: 114
-      Script: {instanceID: 1730}
-    - Class: 114
-      Script: {instanceID: 1732}
-    - Class: 114
       Script: {instanceID: 1734}
     - Class: 114
-      Script: {instanceID: 1736}
-    - Class: 114
       Script: {instanceID: 1738}
-    - Class: 114
-      Script: {instanceID: 1748}
-    - Class: 114
-      Script: {instanceID: 1992}
-    - Class: 114
-      Script: {instanceID: 2748}
-    - Class: 114
-      Script: {instanceID: 2846}
-    - Class: 114
-      Script: {instanceID: 2992}
-    - Class: 114
-      Script: {instanceID: 3136}
     - Class: 114
       Script: {instanceID: 3474}
     - Class: 114
@@ -333,83 +520,19 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 4438}
     - Class: 114
-      Script: {instanceID: 4566}
-    - Class: 114
-      Script: {instanceID: 4604}
-    - Class: 114
       Script: {instanceID: 4658}
-    - Class: 114
-      Script: {instanceID: 4714}
-    - Class: 114
-      Script: {instanceID: 4968}
-    - Class: 114
-      Script: {instanceID: 5144}
-    - Class: 114
-      Script: {instanceID: 5628}
-    - Class: 114
-      Script: {instanceID: 5796}
-    - Class: 114
-      Script: {instanceID: 5852}
-    - Class: 114
-      Script: {instanceID: 6032}
-    - Class: 114
-      Script: {instanceID: 6326}
-    - Class: 114
-      Script: {instanceID: 6474}
     - Class: 114
       Script: {instanceID: 7510}
     - Class: 114
-      Script: {instanceID: 7592}
-    - Class: 114
-      Script: {instanceID: 7620}
-    - Class: 114
       Script: {instanceID: 7720}
-    - Class: 114
-      Script: {instanceID: 7732}
-    - Class: 114
-      Script: {instanceID: 8054}
-    - Class: 114
-      Script: {instanceID: 8058}
-    - Class: 114
-      Script: {instanceID: 8084}
     - Class: 114
       Script: {instanceID: 8426}
     - Class: 114
-      Script: {instanceID: 8528}
+      Script: {instanceID: 8730}
     - Class: 114
-      Script: {instanceID: 8732}
+      Script: {instanceID: 8992}
     - Class: 114
-      Script: {instanceID: 8978}
-    - Class: 114
-      Script: {instanceID: 8994}
-    - Class: 114
-      Script: {instanceID: 9118}
-    - Class: 114
-      Script: {instanceID: 9124}
-    - Class: 114
-      Script: {instanceID: 9304}
-    - Class: 114
-      Script: {instanceID: 9358}
-    - Class: 114
-      Script: {instanceID: 9436}
-    - Class: 114
-      Script: {instanceID: 9554}
-    - Class: 114
-      Script: {instanceID: 9572}
-    - Class: 114
-      Script: {instanceID: 9730}
-    - Class: 114
-      Script: {instanceID: 9944}
-    - Class: 114
-      Script: {instanceID: 10146}
-    - Class: 114
-      Script: {instanceID: 10738}
-    - Class: 114
-      Script: {instanceID: 11302}
-    - Class: 114
-      Script: {instanceID: 11792}
-    - Class: 114
-      Script: {instanceID: 12238}
+      Script: {instanceID: 9552}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 128
@@ -822,7 +945,7 @@ ScriptsOnlyBuild:
   - hash:
       serializedVersion: 2
       Hash: e3da543df7722ea4cee9758d87bc6c41
-    assemblyName: Assembly-CSharp.dll
+    assemblyName: NewAssembly.dll
     namespaceName: 
     className: ActorScript
   - hash:
@@ -906,7 +1029,7 @@ ScriptsOnlyBuild:
   - hash:
       serializedVersion: 2
       Hash: 71bb6a6b6c8f052f948db64c7dd3ca4f
-    assemblyName: Assembly-CSharp.dll
+    assemblyName: NewAssembly.dll
     namespaceName: 
     className: ExitScript
   - hash:
@@ -927,12 +1050,6 @@ ScriptsOnlyBuild:
     assemblyName: Unity.VisualScripting.Core.dll
     namespaceName: Unity.VisualScripting
     className: UnityOnSelectMessageListener
-  - hash:
-      serializedVersion: 2
-      Hash: 7bda4df82e99ddd6e5cbe1dd112a2f1d
-    assemblyName: Assembly-CSharp.dll
-    namespaceName: 
-    className: IconScriptPrototype
   - hash:
       serializedVersion: 2
       Hash: aadb33b0748ee25c95d6cf646ae5826b
@@ -1020,7 +1137,7 @@ ScriptsOnlyBuild:
   - hash:
       serializedVersion: 2
       Hash: 71bb6a6b6c8f052f948db64c7dd3ca4f
-    assemblyName: Assembly-CSharp.dll
+    assemblyName: NewAssembly.dll
     namespaceName: 
     className: TextboxScript
   - hash:
@@ -1512,7 +1629,7 @@ ScriptsOnlyBuild:
   - hash:
       serializedVersion: 2
       Hash: 71bb6a6b6c8f052f948db64c7dd3ca4f
-    assemblyName: Assembly-CSharp.dll
+    assemblyName: NewAssembly.dll
     namespaceName: 
     className: ButtonScript
   - hash:
@@ -1521,12 +1638,6 @@ ScriptsOnlyBuild:
     assemblyName: Unity.VisualScripting.State.dll
     namespaceName: Unity.VisualScripting
     className: StateGraphAsset
-  - hash:
-      serializedVersion: 2
-      Hash: 71bb6a6b6c8f052f948db64c7dd3ca4f
-    assemblyName: Assembly-CSharp.dll
-    namespaceName: 
-    className: PersistenceScript
   - hash:
       serializedVersion: 2
       Hash: 6b3057497eb6f0e52612476af702bf8c
@@ -1566,7 +1677,7 @@ ScriptsOnlyBuild:
   - hash:
       serializedVersion: 2
       Hash: 9ee49244b2138029d4bcd9291b4cee4b
-    assemblyName: Assembly-CSharp.dll
+    assemblyName: NewAssembly.dll
     namespaceName: 
     className: DayNightScript
   - hash:
@@ -1685,8 +1796,8 @@ ScriptsOnlyBuild:
     className: SpriteShapeController
   - hash:
       serializedVersion: 2
-      Hash: 8477f26ab179d44cad35acc6a9922664
-    assemblyName: Assembly-CSharp.dll
+      Hash: 948c94db9d1e0ff53e4a08ee5fab8edf
+    assemblyName: NewAssembly.dll
     namespaceName: 
     className: CoreGameScript
   - hash:
@@ -1955,12 +2066,6 @@ ScriptsOnlyBuild:
     className: DebugUIHandlerButton
   - hash:
       serializedVersion: 2
-      Hash: c8cb69db2b15d737c3a964c0b7d44bd3
-    assemblyName: Assembly-CSharp.dll
-    namespaceName: 
-    className: IconDemoScript
-  - hash:
-      serializedVersion: 2
       Hash: 2574ac7d50617d23cdefe4ad22f5e1ad
     assemblyName: Unity.VisualScripting.Core.dll
     namespaceName: Unity.VisualScripting
@@ -2087,6 +2192,7 @@ ScriptsOnlyBuild:
     className: UnityOnSliderValueChangedMessageListener
   platform: 19
   scenePathNames:
+  - Assets/InitTestScene637955944111295943.unity
   - Assets/Scenes/TitleScene.unity
   - Assets/Scenes/GameScene.unity
-  playerPath: C:/Users/William Brett/Downloads/SocialDeduction.exe
+  playerPath: C:/Users/William Brett/Documents/GitHub/SocialDeduction/Temp/UnityTempFile-7209c15b5d33c334cad2b0f317312a83/PlayerWithTests/PlayerWithTests.exe

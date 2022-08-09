@@ -333,7 +333,7 @@
 "Assets/Scipts/ExitScript.cs"
 "Assets/Scipts/TextboxScript.cs"
 -langversion:9.0
-
+/unsafe+
 /deterministic
 /optimize+
 /debug:portable
