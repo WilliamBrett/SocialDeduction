@@ -9,6 +9,7 @@ using System.Threading;
 using UnityEditor;
 using System.Linq;
 using UnityEditor.SceneManagement;
+using UnityEngine.UI;
 
 public class TestSuite
 {
@@ -16,6 +17,10 @@ public class TestSuite
     public CoreGameScript CoreScript;
     private GameObject[] CountOfHeads; //used to count "Avatar" items to be assigned to Actors
     private GameObject Textbox; //The object that text is written to
+    private int expectedSocialRoles = 1;
+    private int expectedInvestigativeRoles = 2;
+    private int expectedProtectiveRoles = 0;
+    private int expectedKillerRoles = 1;
 
 
     public void SetReferences()
@@ -24,9 +29,8 @@ public class TestSuite
         Textbox = GameObject.FindGameObjectWithTag("Textbox"); //Textbox is setup
         CountOfHeads = GameObject.FindGameObjectsWithTag("Actor"); //CountOfHeads is setup
     }
-    public void InitializeGame()
+    public void RestartGame()
     {
-        Textbox.GetComponent<TextboxScript>().Start(); 
         CoreScript.Initialize();
         CoreScript.Start();
     }
@@ -65,8 +69,8 @@ public class TestSuite
     [UnityTest]
     public IEnumerator VerifyTextbox()
     {
-        //SetReferences();
-        Assert.AreEqual(CoreScript.getTextbox(), Textbox);
+        SetReferences();
+        Assert.AreEqual(CoreScript.DebugGetTextbox(), Textbox);
         yield return null;
     }
 
@@ -85,6 +89,65 @@ public class TestSuite
         Assert.AreEqual(1, 1);
     }
 
+    [UnityTest]
+    public IEnumerator SocialIndexCheck()
+    {
+        SetReferences();
+        Assert.AreEqual(expectedSocialRoles, CoreScript.SocialIndex.Length);
+        yield return null;
+    }
+    [UnityTest]
+    public IEnumerator InvestigativeIndexCheck()
+    {
+        SetReferences();
+        Assert.AreEqual(expectedInvestigativeRoles, CoreScript.InvestigativeIndex.Length);
+        yield return null;
+    }
+    [UnityTest]
+    public IEnumerator ProtectiveIndexCheck()
+    {
+        SetReferences();
+        Assert.AreEqual(expectedProtectiveRoles, CoreScript.ProtectiveIndex.Length);
+        yield return null;
+    }
+    [UnityTest]
+    public IEnumerator KillerIndexCheck()
+    {
+        SetReferences();
+        Assert.AreEqual(expectedKillerRoles, CoreScript.KillerIndex.Length);
+        yield return null;
+    }
+    [UnityTest]
+    public IEnumerator IndexExclusivityCheck()
+    {
+        SetReferences();
+        int[] CivHat = new int[CoreScript.ActorQuantity];
+        for (int i = 0; i < CivHat.Length; i++)
+        {
+            CivHat[i] = i;
+        }
+        for (int i = 0; i < CoreScript.InvestigativeIndex.Length; i++)
+        {
+            CivHat = CivHat.Where(w => w != CoreScript.InvestigativeIndex[i]).ToArray();
+        }
+        for (int i = 0; i < CoreScript.SocialIndex.Length; i++)
+        {
+            CivHat = CivHat.Where(w => w != CoreScript.SocialIndex[i]).ToArray();
+        }
+        for (int i = 0; i < CoreScript.ProtectiveIndex.Length; i++)
+        {
+            CivHat = CivHat.Where(w => w != CoreScript.ProtectiveIndex[i]).ToArray();
+        }
+        for (int i = 0; i < CoreScript.KillerIndex.Length; i++)
+        {
+            CivHat = CivHat.Where(w => w != CoreScript.KillerIndex[i]).ToArray();
+        }
+        int expectedCiv = CoreScript.ActorQuantity - expectedSocialRoles - expectedInvestigativeRoles - expectedProtectiveRoles - expectedKillerRoles;
+        Assert.AreEqual(expectedCiv, CivHat.Length);
+        //int[] Hat = new int[CoreScript.ActorQuantity];
+        //Hat = CoreScript.SetupHat();
+        yield return null;
+    }
     /*[Test]//[Test, Scene("GameScene")]
     public void BasicGameObjectFound()
     {
@@ -92,7 +155,7 @@ public class TestSuite
         //SetGameScene();
         Assert.NotNull(GameObject.FindWithTag("EventSystem"));
     }*/
-    
+
     [UnityTest]
     public IEnumerator UnityTestTest()
     {
@@ -100,24 +163,13 @@ public class TestSuite
         yield return null;
     }
 
-    [UnityTest]
-    public IEnumerator UnityStartTest()
-    {
-        CoreScript = GameObject.FindGameObjectWithTag("EventSystem").GetComponent<CoreGameScript>();
-        CoreScript.Initialize();
-        CoreScript.Start();
-        Textbox = GameObject.FindGameObjectWithTag("Textbox"); //Textbox is setup
-        Textbox.GetComponent<TextboxScript>().Start();
-        Assert.AreEqual(CoreScript.getTextbox(), Textbox);
-        yield return null;
-    }
 
     [UnityTest]
     public IEnumerator SetupTextboxTest()
     {
         SetReferences();
-        InitializeGame();
-        Assert.AreEqual(CoreScript.getTextbox(), Textbox);
+        //InitializeGame();
+        Assert.AreEqual(CoreScript.DebugGetTextbox(), Textbox);
         yield return null;
     }
 
@@ -125,11 +177,88 @@ public class TestSuite
     public IEnumerator SetupPlayersTest()
     {
         SetReferences();
-        InitializeGame();
+        //InitializeGame();
         Assert.AreEqual(12, CountOfHeads.Length);
         yield return null;
     }
 
+    /*
+    [UnityTest]
+    public IEnumerator Test()
+    {
+        SetReferences();
+        yield return null;
+    }
+    */
+
+    [UnityTest]
+    public IEnumerator DuskTest()
+    {
+        SetReferences();
+        CoreScript.DayToNight();
+        Assert.IsTrue(CoreScript.NightSky.activeSelf);
+        yield return null;
+    }
+
+    [UnityTest]
+    public IEnumerator DawnTest()
+    {
+        SetReferences();
+        CoreScript.DayToNight();
+        CoreScript.NighttoDay();
+        Assert.IsTrue(CoreScript.DaySky.activeSelf);
+        yield return null;
+    }
+
+    [UnityTest]
+    public IEnumerator TextEntryTest()
+    {
+        SetReferences();
+        string exampleText = "TextEntryTest";
+        CoreScript.TextboxAppend(exampleText);
+        Assert.AreEqual("\n" + exampleText, Textbox.GetComponent<TextboxScript>().DebugViewText());
+        Textbox.GetComponent<TextboxScript>().DebugClearText();
+        yield return null;
+    }
+
+    [UnityTest]
+    public IEnumerator SpriteTest()
+    {
+        SetReferences();
+        CoreScript.ChangeSprite(0, CoreScript.MagnifyingGlassIcon);
+        Assert.AreEqual(CoreScript.MagnifyingGlassIcon, CoreScript.CountOfHeads[0].GetComponent<Image>().sprite);
+        CoreScript.ChangeSprite(0, CoreScript.CompassIcon);
+        yield return null;
+    }
+
+    [UnityTest]
+    public IEnumerator IndecisiveVoteTest()
+    {
+        SetReferences();
+        CoreScript.SetupVoteTalley();
+        CoreScript.TalleyVote();
+        Assert.AreEqual("\n" + "The vote ends in indecision, nobody accued enough votes to be sentenced to death.", Textbox.GetComponent<TextboxScript>().DebugViewText());
+        Textbox.GetComponent<TextboxScript>().DebugClearText();
+        yield return null;
+    }
+
+    [UnityTest]
+    public IEnumerator DecisiveVoteTest()
+    {
+        SetReferences();
+        int rng = Random.Range(2, CoreScript.ActorQuantity) - 1;
+        CoreScript.SetupVoteTalley();
+        CoreScript.DebugHysteria(rng);
+        for (int i = 1; i < CoreScript.ActorQuantity; i++)
+        {
+            CoreScript.ActorVote(i);
+        }
+        CoreScript.TalleyVote();
+        Assert.IsFalse(CoreScript.DebugCheckAlive(rng));
+        RestartGame();
+        Textbox.GetComponent<TextboxScript>().DebugClearText();
+        yield return null;
+    }
 
     /*[Test]
     public void SceneLoaded()
@@ -179,7 +308,7 @@ public class TestSuite
         CoreScript.TextboxAppend("Test");
         Assert.Equals(Textbox.GetComponent<TextMeshProUGUI>().text, "Test");
     }*/
-    
+
     // A Test behaves as an ordinary method
     /*[Test]
     public void TestingTestScriptSimplePasses()

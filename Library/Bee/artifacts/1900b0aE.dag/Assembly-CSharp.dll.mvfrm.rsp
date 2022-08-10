@@ -35,6 +35,9 @@ Library\Bee\artifacts\mvdfrm\Unity.Services.Core.Analytics.ref.dll_EDA1682A714EA
 Library\Bee\artifacts\mvdfrm\Unity.Services.Core.Environments.ref.dll_7E0AC2CDE81D9C6D.mvfrm
 Library\Bee\artifacts\mvdfrm\Unity.Services.Core.ref.dll_131AC9C5EC6E6517.mvfrm
 Library\Bee\artifacts\mvdfrm\Unity.ShaderGraph.Editor.ref.dll_0F50152946DB09D0.mvfrm
+Library\Bee\artifacts\mvdfrm\Unity.TestTools.CodeCoverage.Editor.OpenCover.Model.ref.dll_D3B9364D6FB03093.mvfrm
+Library\Bee\artifacts\mvdfrm\Unity.TestTools.CodeCoverage.Editor.OpenCover.Mono.Reflection.ref.dll_E668CD773429A040.mvfrm
+Library\Bee\artifacts\mvdfrm\Unity.TestTools.CodeCoverage.Editor.ref.dll_F09CF4826CE11CD9.mvfrm
 Library\Bee\artifacts\mvdfrm\Unity.TextMeshPro.Editor.ref.dll_159E061D77A10B86.mvfrm
 Library\Bee\artifacts\mvdfrm\Unity.TextMeshPro.ref.dll_84A4293DBDD182DB.mvfrm
 Library\Bee\artifacts\mvdfrm\Unity.Timeline.Editor.ref.dll_0D3D3C0B73557612.mvfrm

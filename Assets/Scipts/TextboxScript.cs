@@ -18,5 +18,15 @@ public class TextboxScript : MonoBehaviour
     {
         textMeshPro.text += textToAdd;
     }
+
+    public string DebugViewText()
+    {
+        return textMeshPro.text;
+    }
+
+    public void DebugClearText()
+    {
+        textMeshPro.text = "";
+    }
 }
 

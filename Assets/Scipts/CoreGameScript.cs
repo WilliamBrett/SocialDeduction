@@ -25,10 +25,10 @@ public class CoreGameScript : MonoBehaviour
     //Random names are pulled from NameRegistry to assign to Actors
     private readonly string[] NameRegistry = { "Ace", "Barbara", "Boris", "Caleb", "David", "Elizabeth", "James", "Jennifer", "Jessica", "John", "Joseph", "Linda", "Mary", "Michael", "Patricia", "Patrick", "Richard", "Robert", "Sarah", "Susan", "Thomas", "William" };
     private int[] Hat; //This is used to talley votes
-    private int[] SocialIndex; //used to record the "social" role members
-    private int[] InvestigativeIndex; //used to record the "investigative" role members"
-    private int[] ProtectiveIndex; //used to record the "protective" role members
-    private int[] KillerIndex; //used to record the "killer" role members"
+    public int[] SocialIndex; //used to record the "social" role members
+    public int[] InvestigativeIndex; //used to record the "investigative" role members"
+    public int[] ProtectiveIndex; //used to record the "protective" role members
+    public int[] KillerIndex; //used to record the "killer" role members"
     private int HatSize; 
     private int[] VoteTalley; //used to talley votes
     public int ActorQuantity = 12; //this is meant to eventually be adjustable to control the number of "Actors"
@@ -359,7 +359,7 @@ public class CoreGameScript : MonoBehaviour
         return;
     }
 
-    void ActorVote(int ActorID)
+    public void ActorVote(int ActorID)
     {
         int decision = GeneralPublic[ActorID].Accuse();
         if (decision == -1)
@@ -373,7 +373,7 @@ public class CoreGameScript : MonoBehaviour
         }
     }
 
-    void SetupHat()
+    public void SetupHat()
     {
         Hat = new int[GeneralPublic.Length];
         for (int i = 1; i < GeneralPublic.Length; i++)
@@ -383,7 +383,7 @@ public class CoreGameScript : MonoBehaviour
         }
     }
 
-    void setupVoteTalley()
+    public void SetupVoteTalley()
     {
         VoteTalley = new int[GeneralPublic.Length];
         for (int i = 1; i < GeneralPublic.Length; i++)
@@ -392,7 +392,7 @@ public class CoreGameScript : MonoBehaviour
         }
     }
 
-    void TalleyVote()
+    public void TalleyVote()
     {
         if (VoteTalley.Max() >= (Alive.Length / 2))
         {
@@ -459,7 +459,7 @@ public class CoreGameScript : MonoBehaviour
         
     }
 
-    public GameObject getTextbox()
+    public GameObject DebugGetTextbox()
     {
         return Textbox;
     }
@@ -471,6 +471,29 @@ public class CoreGameScript : MonoBehaviour
             GeneralPublic[i].SetTrueIcon();
         }
     }
+
+    public void DebugHysteria(int tar)
+    {
+        for (int i = 1; i < GeneralPublic.Length; i++)
+        {
+            GeneralPublic[i].AddAmnity(tar, 100);
+        }
+    }
+
+    public bool DebugCheckAlive(int tar)
+    {
+        return GeneralPublic[tar].Alive;
+    }
+    /*public int[] DebugCivilianIndex()
+    {
+        int[] CivHat = new int[ActorQuantity];
+        for (int i = 0; i < ActorQuantity; i++)
+        {
+            CivHat[i] = i;
+        }
+
+        return CivHat;
+    }*/
 
     public void ProgressPhase()
     {
@@ -544,7 +567,7 @@ public class CoreGameScript : MonoBehaviour
                 break;
             case 29:
                 SetupHat();
-                setupVoteTalley();
+                SetupVoteTalley();
                 GamePhase = 3;
                 PhaseDelay = ShortDelay;
                 break;

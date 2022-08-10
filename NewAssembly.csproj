@@ -59,9 +59,9 @@
     <Compile Include="Assets\Scipts\ActorScript.cs" />
     <Compile Include="Assets\Scipts\ExitScript.cs" />
     <Compile Include="Assets\Scipts\TextboxScript.cs" />
+    <Compile Include="Assets\Scipts\CoreGameScript.cs" />
     <Compile Include="Assets\Scipts\ButtonScript.cs" />
     <Compile Include="Assets\Scipts\DayNightScript.cs" />
-    <Compile Include="Assets\Scipts\CoreGameScript.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Scipts\GameAssembly.asmdef" />
