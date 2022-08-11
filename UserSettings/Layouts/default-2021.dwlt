@@ -19,7 +19,7 @@ MonoBehaviour:
     width: 1280
     height: 629.3334
   m_ShowMode: 4
-  m_Title: Code Coverage
+  m_Title: Inspector
   m_RootView: {fileID: 2}
   m_MinSize: {x: 875, y: 300}
   m_MaxSize: {x: 10000, y: 10000}
@@ -119,7 +119,7 @@ MonoBehaviour:
   m_MinSize: {x: 300, y: 200}
   m_MaxSize: {x: 24288, y: 16192}
   vertical: 0
-  controlID: 48
+  controlID: 593
 --- !u!114 &6
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -139,12 +139,12 @@ MonoBehaviour:
     serializedVersion: 2
     x: 0
     y: 0
-    width: 747.3333
+    width: 750.6667
     height: 579.3333
   m_MinSize: {x: 200, y: 200}
   m_MaxSize: {x: 16192, y: 16192}
   vertical: 1
-  controlID: 38
+  controlID: 46
 --- !u!114 &7
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -164,12 +164,12 @@ MonoBehaviour:
     serializedVersion: 2
     x: 0
     y: 0
-    width: 747.3333
+    width: 750.6667
     height: 349.33334
   m_MinSize: {x: 200, y: 100}
   m_MaxSize: {x: 16192, y: 8096}
   vertical: 0
-  controlID: 39
+  controlID: 107
 --- !u!114 &8
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -187,7 +187,7 @@ MonoBehaviour:
     serializedVersion: 2
     x: 0
     y: 0
-    width: 183.33333
+    width: 280.66666
     height: 349.33334
   m_MinSize: {x: 201, y: 221}
   m_MaxSize: {x: 4001, y: 4021}
@@ -206,24 +206,24 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 1
   m_Script: {fileID: 12006, guid: 0000000000000000e000000000000000, type: 0}
-  m_Name: SceneView
+  m_Name: GameView
   m_EditorClassIdentifier: 
   m_Children: []
   m_Position:
     serializedVersion: 2
-    x: 183.33333
+    x: 280.66666
     y: 0
-    width: 564
+    width: 470.00003
     height: 349.33334
   m_MinSize: {x: 202, y: 221}
   m_MaxSize: {x: 4002, y: 4021}
-  m_ActualView: {fileID: 16}
+  m_ActualView: {fileID: 14}
   m_Panes:
   - {fileID: 16}
   - {fileID: 14}
   - {fileID: 17}
-  m_Selected: 0
-  m_LastSelected: 1
+  m_Selected: 1
+  m_LastSelected: 0
 --- !u!114 &10
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -241,7 +241,7 @@ MonoBehaviour:
     serializedVersion: 2
     x: 0
     y: 349.33334
-    width: 747.3333
+    width: 750.6667
     height: 229.99997
   m_MinSize: {x: 231, y: 271}
   m_MaxSize: {x: 10001, y: 10021}
@@ -261,24 +261,24 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 1
   m_Script: {fileID: 12006, guid: 0000000000000000e000000000000000, type: 0}
-  m_Name: CodeCoverageWindow
+  m_Name: InspectorWindow
   m_EditorClassIdentifier: 
   m_Children: []
   m_Position:
     serializedVersion: 2
-    x: 747.3333
+    x: 750.6667
     y: 0
-    width: 532.6667
+    width: 529.3333
     height: 579.3333
-  m_MinSize: {x: 446, y: 576}
+  m_MinSize: {x: 276, y: 71}
   m_MaxSize: {x: 4001, y: 4021}
-  m_ActualView: {fileID: 12}
+  m_ActualView: {fileID: 20}
   m_Panes:
   - {fileID: 20}
   - {fileID: 21}
   - {fileID: 13}
   - {fileID: 12}
-  m_Selected: 3
+  m_Selected: 0
   m_LastSelected: 2
 --- !u!114 &12
 MonoBehaviour:
@@ -292,7 +292,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b5115ff20f1ea204dac14fa49c0e8f69, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_MinSize: {x: 445, y: 555}
+  m_MinSize: {x: 445, y: 385}
   m_MaxSize: {x: 4000, y: 4000}
   m_TitleContent:
     m_Text: Code Coverage
@@ -300,9 +300,9 @@ MonoBehaviour:
     m_Tooltip: 
   m_Pos:
     serializedVersion: 2
-    x: 747.3334
+    x: 750.6667
     y: 72.66667
-    width: 531.6667
+    width: 528.3333
     height: 558.3333
   m_ViewDataDictionary: {fileID: 0}
   m_OverlayCanvas:
@@ -328,16 +328,16 @@ MonoBehaviour:
     m_Tooltip: 
   m_Pos:
     serializedVersion: 2
-    x: 747.3334
+    x: 750.6667
     y: 72.66667
-    width: 531.6667
+    width: 528.3333
     height: 558.3333
   m_ViewDataDictionary: {fileID: 0}
   m_OverlayCanvas:
     m_LastAppliedPresetName: Default
     m_SaveData: []
   m_Spl:
-    ID: 129
+    ID: 132
     splitterInitialOffset: 182.66667
     currentActiveSplitter: -1
     realSizes:
@@ -369,7 +369,7 @@ MonoBehaviour:
       name: SocialDeduction
       fullName: SocialDeduction
       resultStatus: 1
-      duration: 1.3790767
+      duration: 1.6491
       messages: 
       output: 
       stacktrace: 
@@ -385,7 +385,7 @@ MonoBehaviour:
       name: Tests.dll
       fullName: C:/Users/William Brett/Documents/GitHub/SocialDeduction/Library/ScriptAssemblies/Tests.dll
       resultStatus: 1
-      duration: 1.17885
+      duration: 1.2347546
       messages: 
       output: 
       stacktrace: 
@@ -401,7 +401,7 @@ MonoBehaviour:
       name: TestSuite
       fullName: TestSuite
       resultStatus: 1
-      duration: 1.1693825
+      duration: 1.2220602
       messages: 
       output: 
       stacktrace: 
@@ -412,12 +412,80 @@ MonoBehaviour:
       categories: []
       parentId: 1003
       parentUniqueId: '[Tests][C:/Users/William Brett/Documents/GitHub/SocialDeduction/Library/ScriptAssemblies/Tests.dll][suite]'
+    - id: 1024
+      uniqueId: Tests.dll/TestSuite/[Tests][TestSuite.AutopilotTest]
+      name: AutopilotTest
+      fullName: TestSuite.AutopilotTest
+      resultStatus: 1
+      duration: 0.3694179
+      messages: 
+      output: 
+      stacktrace: 
+      notRunnable: 0
+      ignoredOrSkipped: 0
+      description: 
+      isSuite: 0
+      categories:
+      - Uncategorized
+      parentId: 1001
+      parentUniqueId: Tests.dll/[Tests][TestSuite][suite]
+    - id: 1031
+      uniqueId: Tests.dll/TestSuite/[Tests][TestSuite.BlockTest]
+      name: BlockTest
+      fullName: TestSuite.BlockTest
+      resultStatus: 1
+      duration: 0.0347446
+      messages: 
+      output: 
+      stacktrace: 
+      notRunnable: 0
+      ignoredOrSkipped: 0
+      description: 
+      isSuite: 0
+      categories:
+      - Uncategorized
+      parentId: 1001
+      parentUniqueId: Tests.dll/[Tests][TestSuite][suite]
+    - id: 1028
+      uniqueId: Tests.dll/TestSuite/[Tests][TestSuite.ButtonBasicTest]
+      name: ButtonBasicTest
+      fullName: TestSuite.ButtonBasicTest
+      resultStatus: 1
+      duration: 0.027788
+      messages: 
+      output: 
+      stacktrace: 
+      notRunnable: 0
+      ignoredOrSkipped: 0
+      description: 
+      isSuite: 0
+      categories:
+      - Uncategorized
+      parentId: 1001
+      parentUniqueId: Tests.dll/[Tests][TestSuite][suite]
     - id: 1014
       uniqueId: Tests.dll/TestSuite/[Tests][TestSuite.DawnTest]
       name: DawnTest
       fullName: TestSuite.DawnTest
       resultStatus: 1
-      duration: 0.6034493
+      duration: 0.0403788
+      messages: 
+      output: 
+      stacktrace: 
+      notRunnable: 0
+      ignoredOrSkipped: 0
+      description: 
+      isSuite: 0
+      categories:
+      - Uncategorized
+      parentId: 1001
+      parentUniqueId: Tests.dll/[Tests][TestSuite][suite]
+    - id: 1027
+      uniqueId: Tests.dll/TestSuite/[Tests][TestSuite.DeathTest]
+      name: DeathTest
+      fullName: TestSuite.DeathTest
+      resultStatus: 1
+      duration: 0.0278525
       messages: 
       output: 
       stacktrace: 
@@ -434,7 +502,7 @@ MonoBehaviour:
       name: DecisiveVoteTest
       fullName: TestSuite.DecisiveVoteTest
       resultStatus: 1
-      duration: 0.0596593
+      duration: 0.0205238
       messages: 
       output: 
       stacktrace: 
@@ -451,7 +519,7 @@ MonoBehaviour:
       name: DuskTest
       fullName: TestSuite.DuskTest
       resultStatus: 1
-      duration: 0.0312587
+      duration: 0.020497
       messages: 
       output: 
       stacktrace: 
@@ -468,7 +536,7 @@ MonoBehaviour:
       name: IndecisiveVoteTest
       fullName: TestSuite.IndecisiveVoteTest
       resultStatus: 1
-      duration: 0.0571644
+      duration: 0.0283905
       messages: 
       output: 
       stacktrace: 
@@ -485,7 +553,7 @@ MonoBehaviour:
       name: IndexExclusivityCheck
       fullName: TestSuite.IndexExclusivityCheck
       resultStatus: 1
-      duration: 0.052461
+      duration: 0.0446398
       messages: 
       output: 
       stacktrace: 
@@ -502,7 +570,7 @@ MonoBehaviour:
       name: InvestigativeIndexCheck
       fullName: TestSuite.InvestigativeIndexCheck
       resultStatus: 1
-      duration: 0.0358841
+      duration: 0.0242449
       messages: 
       output: 
       stacktrace: 
@@ -519,7 +587,41 @@ MonoBehaviour:
       name: KillerIndexCheck
       fullName: TestSuite.KillerIndexCheck
       resultStatus: 1
-      duration: 0.0295608
+      duration: 0.0206824
+      messages: 
+      output: 
+      stacktrace: 
+      notRunnable: 0
+      ignoredOrSkipped: 0
+      description: 
+      isSuite: 0
+      categories:
+      - Uncategorized
+      parentId: 1001
+      parentUniqueId: Tests.dll/[Tests][TestSuite][suite]
+    - id: 1025
+      uniqueId: Tests.dll/TestSuite/[Tests][TestSuite.KnownMurdererTest]
+      name: KnownMurdererTest
+      fullName: TestSuite.KnownMurdererTest
+      resultStatus: 1
+      duration: 0.028043
+      messages: 
+      output: 
+      stacktrace: 
+      notRunnable: 0
+      ignoredOrSkipped: 0
+      description: 
+      isSuite: 0
+      categories:
+      - Uncategorized
+      parentId: 1001
+      parentUniqueId: Tests.dll/[Tests][TestSuite][suite]
+    - id: 1026
+      uniqueId: Tests.dll/TestSuite/[Tests][TestSuite.MurdererTest]
+      name: MurdererTest
+      fullName: TestSuite.MurdererTest
+      resultStatus: 1
+      duration: 0.0234101
       messages: 
       output: 
       stacktrace: 
@@ -536,7 +638,109 @@ MonoBehaviour:
       name: OnePlusTwoEqualsFour
       fullName: TestSuite.OnePlusTwoEqualsFour
       resultStatus: 1
-      duration: 0.0079168
+      duration: 0.0043954
+      messages: 
+      output: 
+      stacktrace: 
+      notRunnable: 0
+      ignoredOrSkipped: 0
+      description: 
+      isSuite: 0
+      categories:
+      - Uncategorized
+      parentId: 1001
+      parentUniqueId: Tests.dll/[Tests][TestSuite][suite]
+    - id: 1023
+      uniqueId: Tests.dll/TestSuite/[Tests][TestSuite.PlayerNightTest]
+      name: PlayerNightTest
+      fullName: TestSuite.PlayerNightTest
+      resultStatus: 1
+      duration: 0.0221772
+      messages: 
+      output: 
+      stacktrace: 
+      notRunnable: 0
+      ignoredOrSkipped: 0
+      description: 
+      isSuite: 0
+      categories:
+      - Uncategorized
+      parentId: 1001
+      parentUniqueId: Tests.dll/[Tests][TestSuite][suite]
+    - id: 1021
+      uniqueId: Tests.dll/TestSuite/[Tests][TestSuite.PlayerNoStatementTest]
+      name: PlayerNoStatementTest
+      fullName: TestSuite.PlayerNoStatementTest
+      resultStatus: 1
+      duration: 0.0227294
+      messages: 
+      output: 
+      stacktrace: 
+      notRunnable: 0
+      ignoredOrSkipped: 0
+      description: 
+      isSuite: 0
+      categories:
+      - Uncategorized
+      parentId: 1001
+      parentUniqueId: Tests.dll/[Tests][TestSuite][suite]
+    - id: 1024
+      uniqueId: Tests.dll/TestSuite/[Tests][TestSuite.PlayerNoVoteTest]
+      name: PlayerNoVoteTest
+      fullName: TestSuite.PlayerNoVoteTest
+      resultStatus: 1
+      duration: 0.0227033
+      messages: 
+      output: 
+      stacktrace: 
+      notRunnable: 0
+      ignoredOrSkipped: 0
+      description: 
+      isSuite: 0
+      categories:
+      - Uncategorized
+      parentId: 1001
+      parentUniqueId: Tests.dll/[Tests][TestSuite][suite]
+    - id: 1029
+      uniqueId: Tests.dll/TestSuite/[Tests][TestSuite.PlayerRoleHandlingTest]
+      name: PlayerRoleHandlingTest
+      fullName: TestSuite.PlayerRoleHandlingTest
+      resultStatus: 1
+      duration: 0.0263648
+      messages: 
+      output: 
+      stacktrace: 
+      notRunnable: 0
+      ignoredOrSkipped: 0
+      description: 
+      isSuite: 0
+      categories:
+      - Uncategorized
+      parentId: 1001
+      parentUniqueId: Tests.dll/[Tests][TestSuite][suite]
+    - id: 1020
+      uniqueId: Tests.dll/TestSuite/[Tests][TestSuite.PlayerStatementTest]
+      name: PlayerStatementTest
+      fullName: TestSuite.PlayerStatementTest
+      resultStatus: 1
+      duration: 0.022213
+      messages: 
+      output: 
+      stacktrace: 
+      notRunnable: 0
+      ignoredOrSkipped: 0
+      description: 
+      isSuite: 0
+      categories:
+      - Uncategorized
+      parentId: 1001
+      parentUniqueId: Tests.dll/[Tests][TestSuite][suite]
+    - id: 1023
+      uniqueId: Tests.dll/TestSuite/[Tests][TestSuite.PlayerVoteTest]
+      name: PlayerVoteTest
+      fullName: TestSuite.PlayerVoteTest
+      resultStatus: 1
+      duration: 0.0239507
       messages: 
       output: 
       stacktrace: 
@@ -553,7 +757,24 @@ MonoBehaviour:
       name: ProtectiveIndexCheck
       fullName: TestSuite.ProtectiveIndexCheck
       resultStatus: 1
-      duration: 0.0204441
+      duration: 0.0215635
+      messages: 
+      output: 
+      stacktrace: 
+      notRunnable: 0
+      ignoredOrSkipped: 0
+      description: 
+      isSuite: 0
+      categories:
+      - Uncategorized
+      parentId: 1001
+      parentUniqueId: Tests.dll/[Tests][TestSuite][suite]
+    - id: 1027
+      uniqueId: Tests.dll/TestSuite/[Tests][TestSuite.RoleErrorHandlingTest]
+      name: RoleErrorHandlingTest
+      fullName: TestSuite.RoleErrorHandlingTest
+      resultStatus: 1
+      duration: 0.0768017
       messages: 
       output: 
       stacktrace: 
@@ -570,7 +791,7 @@ MonoBehaviour:
       name: SetupPlayersTest
       fullName: TestSuite.SetupPlayersTest
       resultStatus: 1
-      duration: 0.0309933
+      duration: 0.0247688
       messages: 
       output: 
       stacktrace: 
@@ -587,7 +808,7 @@ MonoBehaviour:
       name: SetupTextboxTest
       fullName: TestSuite.SetupTextboxTest
       resultStatus: 1
-      duration: 0.0355083
+      duration: 0.0230829
       messages: 
       output: 
       stacktrace: 
@@ -604,7 +825,7 @@ MonoBehaviour:
       name: SocialIndexCheck
       fullName: TestSuite.SocialIndexCheck
       resultStatus: 1
-      duration: 0.022906
+      duration: 0.020988
       messages: 
       output: 
       stacktrace: 
@@ -621,7 +842,7 @@ MonoBehaviour:
       name: SpriteTest
       fullName: TestSuite.SpriteTest
       resultStatus: 1
-      duration: 0.0314186
+      duration: 0.0215844
       messages: 
       output: 
       stacktrace: 
@@ -638,7 +859,7 @@ MonoBehaviour:
       name: TextEntryTest
       fullName: TestSuite.TextEntryTest
       resultStatus: 1
-      duration: 0.0281802
+      duration: 0.021581
       messages: 
       output: 
       stacktrace: 
@@ -655,7 +876,7 @@ MonoBehaviour:
       name: UnityTestTest
       fullName: TestSuite.UnityTestTest
       resultStatus: 1
-      duration: 0.0326402
+      duration: 0.0241403
       messages: 
       output: 
       stacktrace: 
@@ -672,7 +893,7 @@ MonoBehaviour:
       name: VerifyExists
       fullName: TestSuite.VerifyExists
       resultStatus: 1
-      duration: 0.022995
+      duration: 0.02361
       messages: 
       output: 
       stacktrace: 
@@ -689,7 +910,7 @@ MonoBehaviour:
       name: VerifyTextbox
       fullName: TestSuite.VerifyTextbox
       resultStatus: 1
-      duration: 0.0220097
+      duration: 0.0223221
       messages: 
       output: 
       stacktrace: 
@@ -701,12 +922,12 @@ MonoBehaviour:
       - Uncategorized
       parentId: 1001
       parentUniqueId: Tests.dll/[Tests][TestSuite][suite]
-    m_ResultText: Tests.dll (1.179s)
+    m_ResultText: KnownMurdererTest (0.028s)
     m_ResultStacktrace: 
     m_TestListState:
-      scrollPos: {x: 0, y: 0}
-      m_SelectedIDs: eac9419e
-      m_LastClickedID: -1639855638
+      scrollPos: {x: 0, y: 51}
+      m_SelectedIDs: 5b33fb26
+      m_LastClickedID: 653996891
       m_ExpandedIDs: eac9419ed0646ecd20c8d86645dca17bffffff7f
       m_RenameOverlay:
         m_UserAcceptedRename: 0
@@ -805,9 +1026,9 @@ MonoBehaviour:
     m_Tooltip: 
   m_Pos:
     serializedVersion: 2
-    x: 183.33334
+    x: 280.6667
     y: 72.66667
-    width: 562
+    width: 468.00003
     height: 328.33334
   m_ViewDataDictionary: {fileID: 0}
   m_OverlayCanvas:
@@ -846,7 +1067,7 @@ MonoBehaviour:
     m_HSlider: 0
     m_VSlider: 0
     m_IgnoreScrollWheelUntilClicked: 0
-    m_EnableMouseInput: 0
+    m_EnableMouseInput: 1
     m_EnableSliderZoomHorizontal: 0
     m_EnableSliderZoomVertical: 0
     m_UniformScale: 1
@@ -855,23 +1076,23 @@ MonoBehaviour:
       serializedVersion: 2
       x: 0
       y: 21
-      width: 562
+      width: 468.00003
       height: 307.33334
-    m_Scale: {x: 0.42685187, y: 0.42685187}
-    m_Translation: {x: 281, y: 153.66667}
+    m_Scale: {x: 0.36562502, y: 0.36562502}
+    m_Translation: {x: 234.00002, y: 153.66667}
     m_MarginLeft: 0
     m_MarginRight: 0
     m_MarginTop: 0
     m_MarginBottom: 0
     m_LastShownAreaInsideMargins:
       serializedVersion: 2
-      x: -658.308
-      y: -360
-      width: 1316.616
-      height: 720
+      x: -640
+      y: -420.28488
+      width: 1280
+      height: 840.56976
     m_MinimalGUI: 1
-  m_defaultScale: 0.42685187
-  m_LastWindowPixelSize: {x: 843, y: 492.5}
+  m_defaultScale: 0.36562502
+  m_LastWindowPixelSize: {x: 702.00006, y: 492.5}
   m_ClearInEditMode: 1
   m_NoCameraWarning: 1
   m_LowResolutionForAspectRatios: 00000000000000000000
@@ -899,7 +1120,7 @@ MonoBehaviour:
     serializedVersion: 2
     x: 0
     y: 72.66667
-    width: 182.33333
+    width: 279.66666
     height: 328.33334
   m_ViewDataDictionary: {fileID: 0}
   m_OverlayCanvas:
@@ -908,23 +1129,23 @@ MonoBehaviour:
   m_SceneHierarchy:
     m_TreeViewState:
       scrollPos: {x: 0, y: 0}
-      m_SelectedIDs: 58f9ffff
+      m_SelectedIDs: 
       m_LastClickedID: 0
-      m_ExpandedIDs: aae9ffff46eaffffaeedffffd0eeffff6cefffffc4f2ffff2cfbffff
+      m_ExpandedIDs: f4e3ffff72e4ffff94e4ffffa0e4ffff0eeaffffb0eaffffd2eaffffdeeaffff1aeeffffbceeffffdeeeffffeaeeffffbef3ffffb2f5ffff50f6ffff84f8ffff92f8ffff18fbffffca9e000026a40000bca70000c6a70000
       m_RenameOverlay:
         m_UserAcceptedRename: 0
-        m_Name: 
-        m_OriginalName: 
+        m_Name: Canvas
+        m_OriginalName: Canvas
         m_EditFieldRect:
           serializedVersion: 2
           x: 0
           y: 0
           width: 0
           height: 0
-        m_UserData: 0
+        m_UserData: 42940
         m_IsWaitingForDelay: 0
         m_IsRenaming: 0
-        m_OriginalEventType: 11
+        m_OriginalEventType: 0
         m_IsRenamingFilename: 0
         m_ClientGUIView: {fileID: 8}
       m_SearchString: 
@@ -954,9 +1175,9 @@ MonoBehaviour:
     m_Tooltip: 
   m_Pos:
     serializedVersion: 2
-    x: 183.33334
+    x: 280.6667
     y: 72.66667
-    width: 562
+    width: 468.00003
     height: 328.33334
   m_ViewDataDictionary: {fileID: 0}
   m_OverlayCanvas:
@@ -1311,7 +1532,7 @@ MonoBehaviour:
     serializedVersion: 2
     x: 0
     y: 422
-    width: 746.3333
+    width: 749.6667
     height: 208.99997
   m_ViewDataDictionary: {fileID: 0}
   m_OverlayCanvas:
@@ -1330,22 +1551,22 @@ MonoBehaviour:
     m_SkipHidden: 0
     m_SearchArea: 1
     m_Folders:
-    - Packages/com.unity.testtools.codecoverage
+    - Assets/Scenes
     m_Globs: []
     m_OriginalText: 
   m_ViewMode: 1
   m_StartGridSize: 64
   m_LastFolders:
-  - Packages/com.unity.testtools.codecoverage
+  - Assets/Scenes
   m_LastFoldersGridSize: -1
   m_LastProjectPath: C:\Users\William Brett\Documents\GitHub\SocialDeduction
   m_LockTracker:
     m_IsLocked: 0
   m_FolderTreeState:
-    scrollPos: {x: 0, y: 0}
-    m_SelectedIDs: f28a0000
-    m_LastClickedID: 35570
-    m_ExpandedIDs: 00000000c6700000c870000000ca9a3bffffff7f
+    scrollPos: {x: 0, y: 3.0000305}
+    m_SelectedIDs: d2700000
+    m_LastClickedID: 28882
+    m_ExpandedIDs: 00000000c8700000ca70000000ca9a3bffffff7f
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -1373,7 +1594,7 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 0}
     m_SelectedIDs: 
     m_LastClickedID: 0
-    m_ExpandedIDs: 00000000c6700000c8700000
+    m_ExpandedIDs: 00000000c8700000ca700000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -1400,7 +1621,7 @@ MonoBehaviour:
   m_ListAreaState:
     m_SelectedInstanceIDs: 
     m_LastClickedInstanceID: 0
-    m_HadKeyboardFocusLastEvent: 0
+    m_HadKeyboardFocusLastEvent: 1
     m_ExpandedInstanceIDs: c6230000f874000000000000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
@@ -1451,7 +1672,7 @@ MonoBehaviour:
     serializedVersion: 2
     x: 0
     y: 422
-    width: 746.3333
+    width: 749.6667
     height: 208.99997
   m_ViewDataDictionary: {fileID: 0}
   m_OverlayCanvas:
@@ -1477,10 +1698,10 @@ MonoBehaviour:
     m_Tooltip: 
   m_Pos:
     serializedVersion: 2
-    x: 748.3333
-    y: 19
-    width: 531.6667
-    height: 558.3334
+    x: 750.6667
+    y: 72.66667
+    width: 528.3333
+    height: 558.3333
   m_ViewDataDictionary: {fileID: 0}
   m_OverlayCanvas:
     m_LastAppliedPresetName: Default

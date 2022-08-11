@@ -28,11 +28,19 @@ public class TestSuite
         CoreScript = GameObject.FindGameObjectWithTag("EventSystem").GetComponent<CoreGameScript>();
         Textbox = GameObject.FindGameObjectWithTag("Textbox"); //Textbox is setup
         CountOfHeads = GameObject.FindGameObjectsWithTag("Actor"); //CountOfHeads is setup
+        CoreScript.debug = true;
     }
     public void RestartGame()
     {
         CoreScript.Initialize();
         CoreScript.Start();
+        Textbox.GetComponent<TextboxScript>().DebugClearText();
+
+    }
+    public void ProgressGame()
+    {
+        CoreScript.PhaseDelay = 1;
+        CoreScript.Update();
     }
     /*private static void SetGameScene()
     {
@@ -216,7 +224,7 @@ public class TestSuite
         SetReferences();
         string exampleText = "TextEntryTest";
         CoreScript.TextboxAppend(exampleText);
-        Assert.AreEqual("\n" + exampleText, Textbox.GetComponent<TextboxScript>().DebugViewText());
+        Assert.IsTrue(Textbox.GetComponent<TextboxScript>().DebugViewText().Contains("\n" + exampleText));
         Textbox.GetComponent<TextboxScript>().DebugClearText();
         yield return null;
     }
@@ -237,7 +245,7 @@ public class TestSuite
         SetReferences();
         CoreScript.SetupVoteTalley();
         CoreScript.TalleyVote();
-        Assert.AreEqual("\n" + "The vote ends in indecision, nobody accued enough votes to be sentenced to death.", Textbox.GetComponent<TextboxScript>().DebugViewText());
+        Assert.IsTrue(Textbox.GetComponent<TextboxScript>().DebugViewText().Contains("\n" + "The vote ends in indecision, nobody accued enough votes to be sentenced to death."));
         Textbox.GetComponent<TextboxScript>().DebugClearText();
         yield return null;
     }
@@ -256,10 +264,198 @@ public class TestSuite
         CoreScript.TalleyVote();
         Assert.IsFalse(CoreScript.DebugCheckAlive(rng));
         RestartGame();
-        Textbox.GetComponent<TextboxScript>().DebugClearText();
         yield return null;
     }
 
+    /*
+    [UnityTest]
+    public IEnumerator PlayerStatementSetupTest()
+    {
+        SetReferences();
+        yield return null;
+    }
+    */
+
+    [UnityTest]
+    public IEnumerator PlayerStatementTest()
+    {
+        SetReferences();
+        int rng = Random.Range(2, CoreScript.ActorQuantity) - 1;
+        CoreScript.GamePhase = 200;
+        CoreScript.ButtonClicked(rng);
+        Assert.IsTrue(Textbox.GetComponent<TextboxScript>().DebugViewText().Contains("You accuse " + CoreScript.DebugGetName(rng) + "."));
+        RestartGame();
+        yield return null;
+    }
+
+    [UnityTest]
+    public IEnumerator PlayerNoStatementTest()
+    {
+        SetReferences();
+        CoreScript.GamePhase = 200;
+        CoreScript.ButtonClicked(0);
+        Assert.IsTrue(Textbox.GetComponent<TextboxScript>().DebugViewText().Contains("You abstain from making any statements."));
+        RestartGame();
+        yield return null;
+    }
+
+    /*
+    [UnityTest]
+    public IEnumerator PlayerVoteSetupTest()
+    {
+        SetReferences();
+        CoreScript.GamePhase = 19;
+        ProgressGame();
+        yield return null;
+    }
+    */
+
+    [UnityTest]
+    public IEnumerator PlayerVoteTest()
+    {
+        SetReferences();
+        int rng = Random.Range(2, CoreScript.ActorQuantity) - 1;
+        CoreScript.GamePhase = 300;
+        CoreScript.ButtonClicked(rng);
+        Assert.IsTrue(Textbox.GetComponent<TextboxScript>().DebugViewText().Contains("You vote for " + CoreScript.DebugGetName(rng) + "."));
+        RestartGame();
+        yield return null;
+    }
+
+    [UnityTest]
+    public IEnumerator PlayerNoVoteTest()
+    {
+        SetReferences();
+        CoreScript.GamePhase = 300;
+        CoreScript.ButtonClicked(0);
+        Assert.IsTrue(Textbox.GetComponent<TextboxScript>().DebugViewText().Contains("You abstain from voting."));
+        RestartGame();
+        yield return null;
+    }
+
+    [UnityTest]
+    public IEnumerator PlayerNightTest()
+    {
+        SetReferences();
+        CoreScript.GamePhase = 400;
+        CoreScript.ButtonClicked(0);
+        RestartGame();
+        yield return null;
+    }
+
+    [UnityTest]
+    public IEnumerator AutopilotTest()
+    {
+        SetReferences();
+        for (int i = 0; i < 1000; i++)
+        {
+            ProgressGame();
+        }
+        RestartGame();
+        yield return null;
+    }
+
+    [UnityTest]
+    public IEnumerator KnownMurdererTest()
+    {
+        SetReferences();
+        int rng = Random.Range(2, CoreScript.ActorQuantity) - 1;
+        CoreScript.DebugHysteria(rng);
+        CoreScript.GamePhase = 19;
+        for (int i = 1; i < CoreScript.ActorQuantity + 3; i++)
+        {
+            ProgressGame();
+        }
+        bool debugMania = false;
+        if (Textbox.GetComponent<TextboxScript>().DebugViewText().Contains(" of murder!"))
+        {
+            debugMania = true;
+        }
+        else if (Textbox.GetComponent<TextboxScript>().DebugViewText().Contains(" over their whereabouts the previous night."))
+        {
+            debugMania = true;
+        }
+        else if (Textbox.GetComponent<TextboxScript>().DebugViewText().Contains(" of witchcraft."))
+        {
+            debugMania = true;
+        }
+        else if (Textbox.GetComponent<TextboxScript>().DebugViewText().Contains(" for the recent deaths."))
+        {
+            debugMania = true;
+        }
+        Assert.IsTrue(debugMania);
+        RestartGame();
+        yield return null;
+    }
+
+    [UnityTest]
+    public IEnumerator MurdererTest()
+    {
+        SetReferences();
+        CoreScript.Murder(CoreScript.KillerIndex[0]);
+        Assert.IsTrue(CoreScript.Alive.Length < CoreScript.ActorQuantity);
+        RestartGame();
+        yield return null;
+    }
+
+    [UnityTest]
+    public IEnumerator DeathTest()
+    {
+        SetReferences();
+        CoreScript.Death(0);
+        Assert.IsTrue(Textbox.GetComponent<TextboxScript>().DebugViewText().Contains("You are dead. Whatever the conclusion to this tale, you will not see it..."));
+        RestartGame();
+        yield return null;
+    }
+
+    [UnityTest]
+    public IEnumerator RoleErrorHandlingTest()
+    {
+        SetReferences();
+        CoreScript.DebugSetErrorRoles();
+        for (int i = 0; i < (CoreScript.ActorQuantity * 100); i++)
+        {
+            ProgressGame();
+        }
+        RestartGame();
+        yield return null;
+    }
+
+    [UnityTest]
+    public IEnumerator PlayerRoleHandlingTest()
+    {
+        SetReferences();
+        CoreScript.DebugSetPlayerRoles();
+        for (int i = 0; i < (CoreScript.ActorQuantity * 5); i++)
+        {
+            ProgressGame();
+        }
+        Assert.AreNotEqual(400, CoreScript.GamePhase);
+        RestartGame();
+        yield return null;
+    }
+
+    [UnityTest]
+    public IEnumerator ButtonBasicTest()
+    {
+        SetReferences();
+        CoreScript.ButtonsOn();
+        CoreScript.ButtonsOff();
+        CoreScript.ButtonsOn();
+        CoreScript.ButtonsOff();
+        
+        RestartGame();
+        yield return null;
+    }
+
+    [UnityTest]
+    public IEnumerator BlockTest()
+    {
+        SetReferences();
+        CoreScript.DebugBlockAll();
+        RestartGame();
+        yield return null;
+    }
     /*[Test]
     public void SceneLoaded()
     {

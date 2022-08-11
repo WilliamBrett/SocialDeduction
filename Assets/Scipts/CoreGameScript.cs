@@ -13,7 +13,7 @@ public class CoreGameScript : MonoBehaviour
     public static CoreGameScript current;
     public GameObject[] CountOfHeads; //used to count "Avatar" items to be assigned to Actors
     private Actor[] GeneralPublic; //The general container for "Actor" objects
-    private int[] Alive; //A list of "Actor"s that are currently "alive"
+    public int[] Alive; //A list of "Actor"s that are currently "alive"
     private GameObject Textbox; //The object that text is written to
     public int GamePhase; //Controls the current state of the game
     private Image anImage; //used to specify images for alteration
@@ -34,6 +34,7 @@ public class CoreGameScript : MonoBehaviour
     public int ActorQuantity = 12; //this is meant to eventually be adjustable to control the number of "Actors"
     private int rng; //used for random decisions
     private string AnnouncementBuffer; //A buffer used for time delayed announcements
+    private int IntermissionBookmark; //used to record intermission progress during player phases;
 
     //day & night declerations
     public GameObject DaySky;
@@ -90,7 +91,7 @@ public class CoreGameScript : MonoBehaviour
         for (int i = 1; i < ActorQuantity; i++)
         {
             //this loop assigns unused names, and removes them from unused name registry
-            rng = UnityEngine.Random.Range(0, UnusedNames.Length - 1);
+            rng = UnityEngine.Random.Range(0, UnusedNames.Length );
             GeneralPublic[i].Name = UnusedNames[rng];
             UnusedNames = UnusedNames.Where(w => w != UnusedNames[rng]).ToArray();
         }
@@ -105,7 +106,7 @@ public class CoreGameScript : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    public void Update()
     {
         //incriments timed delays and calls ProgressPhase() as appropriate
         PhaseDelay--;
@@ -164,14 +165,14 @@ public class CoreGameScript : MonoBehaviour
         InvestigativeIndex = new int[GeneralPublic.Length];
         ProtectiveIndex = new int[GeneralPublic.Length];
         KillerIndex  = new int[GeneralPublic.Length];
-        rng = UnityEngine.Random.Range(2, Hat.Length) - 1; //anyone other than the player
+        rng = UnityEngine.Random.Range(2, Hat.Length + 1) - 1; //anyone other than the player
         //sets up a "Murderer" role
         GeneralPublic[Hat[rng]].Role = "Murderer";
         GeneralPublic[Hat[rng]].TrueIcon = KnifeIcon;
         GeneralPublic[Hat[rng]].isEvil = true;
         KillerIndex[0] = Hat[rng];
         Hat = Hat.Where(w => w != Hat[rng]).ToArray(); //takes the number out of the hat
-        rng = UnityEngine.Random.Range(2, Hat.Length) - 1; //anyone other than the player
+        rng = UnityEngine.Random.Range(2, Hat.Length + 1) - 1; //anyone other than the player
         //sets up the "Seer" role
         GeneralPublic[Hat[rng]].Role = "Seer";
         GeneralPublic[Hat[rng]].TrueIcon = CrystalBallIcon;
@@ -183,7 +184,7 @@ public class CoreGameScript : MonoBehaviour
         GeneralPublic[Hat[rng]].TrueIcon = MagnifyingGlassIcon;
         InvestigativeIndex[1] = Hat[rng]; 
         Hat = Hat.Where(w => w != Hat[rng]).ToArray(); //takes the number out of the hat
-        rng = UnityEngine.Random.Range(2, Hat.Length) - 1; //anyone other than the player
+        rng = UnityEngine.Random.Range(2, Hat.Length + 1) - 1; //anyone other than the player
         //sets up the "Escort" role
         GeneralPublic[Hat[rng]].Role = "Escort";
         GeneralPublic[Hat[rng]].TrueIcon = LipsIcon;
@@ -255,11 +256,15 @@ public class CoreGameScript : MonoBehaviour
                 double suspicionLevel = GeneralPublic[ActorID].Suspicion[decision] / 5;
                 int decision2 = Convert.ToInt32((int) Math.Floor(suspicionLevel));
                 if (decision2 > 2) decision2 = 2;
+                if (GeneralPublic[ActorID].Suspicion[decision] == -1)
+                {
+                    decision2 = -1;
+                }
                 switch (decision2)
                 {
                     case -1: //The actor knows the target is not evil
                         PhaseDelay = ShortDelay;
-                        int randomStatementInnocence = UnityEngine.Random.Range(1, 2);
+                        int randomStatementInnocence = UnityEngine.Random.Range(1, 3);
                         switch (randomStatementInnocence)
                         {
                             case 1:
@@ -283,7 +288,7 @@ public class CoreGameScript : MonoBehaviour
                         break;
                     case 1: //The actor is mildly suspicious 
                         PhaseDelay = ShortDelay;
-                        int randomStatementSuspicion = UnityEngine.Random.Range(1, 4);
+                        int randomStatementSuspicion = UnityEngine.Random.Range(1, 5);
                         switch (randomStatementSuspicion)
                         {
                             case 1:
@@ -306,7 +311,7 @@ public class CoreGameScript : MonoBehaviour
                         break;
                     case 2: //The actor is suspicious enough to declare someone of murder
                         PhaseDelay = ShortDelay;
-                        int randomStatementGuilt = UnityEngine.Random.Range(1, 4);
+                        int randomStatementGuilt = UnityEngine.Random.Range(1, 5);
                         switch (randomStatementGuilt)
                         {
                             case 1:
@@ -410,7 +415,7 @@ public class CoreGameScript : MonoBehaviour
         Death(executee);
     }
 
-    void Death(int deadee)
+    public void Death(int deadee)
     {
         GeneralPublic[deadee].Death();
         for (int i = 1; i < GeneralPublic.Length; i++)
@@ -429,14 +434,10 @@ public class CoreGameScript : MonoBehaviour
             ShowAllIcons();
             GamePhase = 999;
         }
-        else if (Alive.Length < 5)
-        {
-
-        }
     }
 
 
-    void Murder(int MurdererId)
+    public void Murder(int MurdererId)
     {
         int decision = GeneralPublic[MurdererId].Accuse();
         //if (debug) TextboxAppend("Murderer's target is: " + decision);
@@ -444,7 +445,7 @@ public class CoreGameScript : MonoBehaviour
         {
             //if murderer doesn't hate anyone, they pick a random target (that is currently alive) ... other than themself. 
             //if (debug) TextboxAppend("Murderer's new target is: " + decision);
-            decision = Alive[UnityEngine.Random.Range(2, Alive.Length) - 1]; 
+            decision = Alive[UnityEngine.Random.Range(2, Alive.Length + 1) - 1]; 
         }
         //if (debug) TextboxAppend("Murderer is " + MurdererId + ", murderee is " + decision);
         if (!GeneralPublic[decision].Protected)
@@ -463,6 +464,31 @@ public class CoreGameScript : MonoBehaviour
     {
         return Textbox;
     }
+
+    public string DebugGetName(int fetchIndex)
+    {
+        return GeneralPublic[fetchIndex].Name;
+    }
+    public void DebugSetErrorRoles()
+    {
+        if (InvestigativeIndex.Length > 0)
+        {
+            GeneralPublic[InvestigativeIndex[0]].Role = "error";
+        }
+        if (SocialIndex.Length > 0)
+        {
+            GeneralPublic[SocialIndex[0]].Role = "error";
+        }
+        if (ProtectiveIndex.Length > 0)
+        {
+            GeneralPublic[ProtectiveIndex[0]].Role = "error";
+        }
+        if (KillerIndex.Length > 0)
+        {
+            GeneralPublic[KillerIndex[0]].Role = "error";
+        }
+    }
+
 
     public void ShowAllIcons()
     {
@@ -483,6 +509,34 @@ public class CoreGameScript : MonoBehaviour
     public bool DebugCheckAlive(int tar)
     {
         return GeneralPublic[tar].Alive;
+    }
+
+    public void DebugSetPlayerRoles()
+    {
+        if (InvestigativeIndex.Length > 0)
+        {
+            InvestigativeIndex[0] = 0;
+        }
+        if (SocialIndex.Length > 0)
+        {
+            SocialIndex[0] = 0;
+        }
+        if (ProtectiveIndex.Length > 0)
+        {
+            ProtectiveIndex[0] = 0;
+        }
+        if (KillerIndex.Length > 0)
+        {
+            KillerIndex[0] = 0;
+        }
+    }
+
+    public void DebugBlockAll()
+    {
+        for (int i = 0; i < GeneralPublic.Length; i++)
+        {
+            GeneralPublic[i].Blocked = true;
+        }
     }
     /*public int[] DebugCivilianIndex()
     {
@@ -520,7 +574,7 @@ public class CoreGameScript : MonoBehaviour
                 //This picks a random name out of the hat, then removes it from the hat
                 if (Hat.Length != 0)
                 {
-                    rng = UnityEngine.Random.Range(1, Hat.Length) - 1;
+                    rng = UnityEngine.Random.Range(1, Hat.Length + 1) - 1;
                     if (Hat[rng] == 0)
                     {
                         Hat = Hat.Where(w => w != Hat[rng]).ToArray();
@@ -576,7 +630,7 @@ public class CoreGameScript : MonoBehaviour
                 HatSize = Hat.Length;
                 if (Hat.Length != 0)
                 {
-                    rng = UnityEngine.Random.Range(1, Hat.Length) - 1;
+                    rng = UnityEngine.Random.Range(1, Hat.Length + 1) - 1;
                     if (Hat[rng] == 0)
                     {
                         Hat = Hat.Where(w => w != Hat[rng]).ToArray();
@@ -624,33 +678,6 @@ public class CoreGameScript : MonoBehaviour
                 GamePhase = 4;
                 break;
             case 4: //Intermission
-                /*    
-                if (Hat.Length != 0) //if any numbers are in the hat
-                {
-                    rng = UnityEngine.Random.Range(1, Hat.Length) - 1; //random number in the hat
-                    if (Hat[rng] == 0) //if number is player
-                    {
-                        GamePhase = 400; //playerphase
-                        Hat = Hat.Where(w => w != Hat[rng]).ToArray(); //remove player's number from the hat
-                        PhaseDelay = MicroDelay;
-                        break;
-                    }
-                    else
-                    {
-                        if (GeneralPublic[rng].Alive) ActorNight(Hat[rng]); //if actor is alive, do the night thing
-                        GeneralPublic[rng].Paranoia(); //paranoia
-                        //if GeneralPublic[rng]
-                         //remove number from the hat
-                    }
-                }
-                else
-                { //if no numbers are in the hat
-                    GamePhase = 41; //end night phase
-                    PhaseDelay = LongDelay;
-                    break;
-                }
-                GamePhase = MicroDelay;
-                */
                 GamePhase = 405;
                 PhaseDelay = MicroDelay;
                 break;
@@ -662,11 +689,12 @@ public class CoreGameScript : MonoBehaviour
             case 41: //social sub-phase
                 if (Hat.Length != 0)
                 {
-                    rng = UnityEngine.Random.Range(1, Hat.Length) - 1;
+                    rng = UnityEngine.Random.Range(1, Hat.Length + 1) - 1;
                     if (Hat[rng] == 0) //if number is player
                     {
 
                         //TextboxAppend("Social test: " + Hat.Length);
+                        IntermissionBookmark = GamePhase;
                         GamePhase = 400; //playerphase
                         Hat = Hat.Where(w => w != Hat[rng]).ToArray(); //remove player's number from the hat
                         PhaseDelay = MicroDelay;
@@ -674,7 +702,7 @@ public class CoreGameScript : MonoBehaviour
                     }
                     else
                     {
-                        rng = UnityEngine.Random.Range(1, Hat.Length) - 1;
+                        rng = UnityEngine.Random.Range(1, Hat.Length + 1) - 1;
                         //TextboxAppend("SocialTest: " + rng + ", " + Hat.Length);
                         switch (GeneralPublic[Hat[rng]].Role)
                         {
@@ -683,7 +711,7 @@ public class CoreGameScript : MonoBehaviour
                                 while (decision == -1 || decision == Hat[rng])
                                 {
                                     //if murderer doesn't hate anyone, they pick a random target (that is currently alive) ... other than themself. 
-                                    decision = Alive[UnityEngine.Random.Range(2, Alive.Length) - 1];
+                                    decision = Alive[UnityEngine.Random.Range(2, Alive.Length + 1) - 1];
                                 }
                                 Hat = Hat.Where(w => w != Hat[rng]).ToArray(); //remove actor's number from the hat
                                 PhaseDelay = MicroDelay;
@@ -714,7 +742,7 @@ public class CoreGameScript : MonoBehaviour
                 PhaseDelay = MicroDelay;
                 if (Hat.Length != 0)
                 {
-                    rng = UnityEngine.Random.Range(1, Hat.Length) - 1;
+                    rng = UnityEngine.Random.Range(1, Hat.Length + 1) - 1;
                     if (GeneralPublic[Hat[rng]].Blocked)
                     {
                         Hat = Hat.Where(w => w != Hat[rng]).ToArray();
@@ -725,6 +753,7 @@ public class CoreGameScript : MonoBehaviour
                     else if (Hat[rng] == 0) //if number is player
                     {
                         //TextboxAppend("Investigative test: " + Hat[rng]);
+                        IntermissionBookmark = GamePhase;
                         GamePhase = 400; //playerphase
                         Hat = Hat.Where(w => w != Hat[rng]).ToArray(); //remove player's number from the hat
                         //PhaseDelay = MicroDelay; redundant
@@ -732,14 +761,14 @@ public class CoreGameScript : MonoBehaviour
                     }
                     else
                     {
-                        rng = UnityEngine.Random.Range(1, Hat.Length) - 1;
+                        rng = UnityEngine.Random.Range(1, Hat.Length + 1) - 1;
                         //TextboxAppend("InvestigativeTest: " + rng + ", " + Hat.Length);
                         switch (GeneralPublic[Hat[rng]].Role)
                         {
                             case "Seer":
                                 for (int i = 1; i < 4; i++)
                                 {
-                                    int decisionSeer = Alive[UnityEngine.Random.Range(1, Alive.Length) - 1];
+                                    int decisionSeer = Alive[UnityEngine.Random.Range(1, Alive.Length + 1) - 1];
                                     if (decisionSeer == Hat[rng])
                                     {
                                         i--;
@@ -748,6 +777,7 @@ public class CoreGameScript : MonoBehaviour
                                     {
                                         if (!GeneralPublic[decisionSeer].isEvil){
                                             GeneralPublic[Hat[rng]].DropSuspicion(decisionSeer);
+                                            GeneralPublic[Hat[rng]].ProvenInnocent(decisionSeer);
                                         }
                                     }
                                 }
@@ -755,13 +785,14 @@ public class CoreGameScript : MonoBehaviour
                                 //PhaseDelay = MicroDelay;
                                 break;
                             case "Investigator":
-                                int decisionInvestigator = Alive[UnityEngine.Random.Range(1, Alive.Length) - 1];
+                                int decisionInvestigator = Alive[UnityEngine.Random.Range(1, Alive.Length + 1) - 1];
                                 if (GeneralPublic[decisionInvestigator].isEvil){
                                     GeneralPublic[Hat[rng]].AddAmnity(decisionInvestigator, 100);
                                 }
                                 else
                                 {
                                     GeneralPublic[Hat[rng]].DropSuspicion(decisionInvestigator);
+                                    GeneralPublic[Hat[rng]].ProvenInnocent(decisionInvestigator);
                                 }
                                 Hat = Hat.Where(w => w != Hat[rng]).ToArray();
                                 //PhaseDelay = MicroDelay;
@@ -788,37 +819,34 @@ public class CoreGameScript : MonoBehaviour
                 GamePhase = 43;
                 break;
             case 43: //protective sub-phase
+                PhaseDelay = MicroDelay;
                 if (Hat.Length != 0)
                 {
                     //TextboxAppend("Protective test: " + Hat[rng]);
-                    rng = UnityEngine.Random.Range(1, Hat.Length) - 1;
+                    rng = UnityEngine.Random.Range(1, Hat.Length + 1) - 1;
                     if (GeneralPublic[Hat[rng]].Blocked)
                     {
                         Hat = Hat.Where(w => w != Hat[rng]).ToArray();
-                        PhaseDelay = MicroDelay;
                         break;
 
                     }
                     else if(Hat[rng] == 0) //if number is player
                     {
+                        IntermissionBookmark = GamePhase;
                         GamePhase = 400; //playerphase
                         Hat = Hat.Where(w => w != Hat[rng]).ToArray(); //remove player's number from the hat
-                        PhaseDelay = MicroDelay;
                         break;
                     }
                 }
                 else
                 { //if no numbers are in the hat
                     GamePhase = 435; //end phase
-                    PhaseDelay = MicroDelay;
                     break;
                 }
-                PhaseDelay = MicroDelay;
                 break;
             case 435://setup killer sub-phase
                 Hat = KillerIndex;
                 PhaseDelay = MicroDelay;
-
                 GamePhase = 44;
                 break;
             case 44: //killer sub-phase
@@ -827,7 +855,7 @@ public class CoreGameScript : MonoBehaviour
                 if (debug) TextboxAppend("Murder phase start.");
                 if (Hat.Length != 0)
                 {
-                    rng = UnityEngine.Random.Range(1, Hat.Length) - 1;
+                    rng = UnityEngine.Random.Range(1, Hat.Length + 1) - 1;
                     if (debug)  TextboxAppend("Murderer is: " + Hat[rng]); //one murderer, "the murderer is 0!"
                     if (GeneralPublic[Hat[rng]].Blocked)
                     {
@@ -890,10 +918,17 @@ public class CoreGameScript : MonoBehaviour
             case 400: //player's turn to night action
                 switch (GeneralPublic[0].Role)
                 {
+                    /*
                     case "Citizen":
                         TextboxAppend("The night is peaceful enough, though in the silence the paranoia of the villagers only grows...");
                         GamePhase = 4;
                         PhaseDelay = MicroDelay;
+                        break;
+                        */
+                    default:
+                        TextboxAppend("Your role is improperly configured. ");
+                        PhaseDelay = ShortDelay;
+                        GamePhase = IntermissionBookmark;
                         break;
                 }
                     
@@ -982,6 +1017,7 @@ class Actor
     { //Initializes an actor with default values
         ID = ActorNum;
         Amnity = new int[totalActors];
+        KnownInnocent = new int[totalActors];
         Suspicion = new int[totalActors];
         Alive = true;
         Role = "Citizen";
@@ -995,7 +1031,8 @@ class Actor
         Amnity[0] = 0;
         for (int i = 1; i < totalActors; i++)
         {
-            Amnity[i] = UnityEngine.Random.Range(1, 5);
+            Amnity[i] = UnityEngine.Random.Range(1, 6);
+            KnownInnocent[i] = 0;
         }
         Amnity[this.ID] = -1;
         Suspicion = Amnity;
@@ -1026,11 +1063,15 @@ class Actor
     { //If an actor is found innocent, or is dead, all accumulated suspicion is lost
         this.Amnity[ActorNum] = -1;
     }
+    public void ProvenInnocent(int ActorNum){
+        KnownInnocent[ActorNum] = ActorNum;
+    }
     public int Accuse()
     { //Returns an actor this actor is suspicious of
         if (!Alive) return -2;
         if (Suspicion.Max() > 4)
         {
+
             return Array.IndexOf(Suspicion, Suspicion.Max());
         }
         return -1;
@@ -1040,6 +1081,15 @@ class Actor
         if (Suspicion.Max() > 99)
         {
             return Array.IndexOf(Suspicion, Suspicion.Max());
+        }
+        else 
+        {
+            int[] InnocentIndex = KnownInnocent.Where(w => w != 0).ToArray();
+            if (InnocentIndex.Length > 0)
+            {
+                int rng = UnityEngine.Random.Range(0, InnocentIndex.Length);
+                return InnocentIndex[rng];
+            }
         }
         return -1;
     }
